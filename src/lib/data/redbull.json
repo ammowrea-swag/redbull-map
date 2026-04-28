@@ -1,0 +1,92 @@
+[
+  {
+    "Index": 1,
+    "Location": "CUNY J-School",
+    "Category": "Vending machine",
+    "Price (8.4oz)": 4.08,
+    "Longitude": 40.7552526,
+    "Latitude": -73.9890187,
+    "Purchase_date": "2026-03-03T05:00:00.000Z",
+    "neighborhood": "Midtown"
+  },
+  {
+    "Index": 2,
+    "Location": "Lidl, Brooklyn",
+    "Category": "Grocery",
+    "Price (8.4oz)": 2.5,
+    "Longitude": 40.6794013,
+    "Latitude": -74.0507698,
+    "Purchase_date": "2026-03-22T04:00:00.000Z",
+    "neighborhood": "Park Slope"
+  },
+  {
+    "Index": 3,
+    "Location": "Frozen Lava",
+    "Category": "Bodega",
+    "Price (8.4oz)": 3.12,
+    "Longitude": 40.6487302,
+    "Latitude": -73.9541572,
+    "Purchase_date": "2026-03-07T05:00:00.000Z",
+    "neighborhood": "Flatbush"
+  },
+  {
+    "Index": 4,
+    "Location": "Barclay's Center",
+    "Category": "Entertainment",
+    "Price (8.4oz)": 6,
+    "Longitude": 40.6826505,
+    "Latitude": -73.9779959,
+    "Purchase_date": "",
+    "neighborhood": ""
+  },
+  {
+    "Index": 5,
+    "Location": "Central Park Vendor",
+    "Category": "Cart",
+    "Price (8.4oz)": 5,
+    "Longitude": 40.7744888,
+    "Latitude": -73.9752791,
+    "Purchase_date": "2026-03-21T04:00:00.000Z",
+    "neighborhood": "Midtown"
+  },
+  {
+    "Index": 6,
+    "Location": "New Times Square Pizza",
+    "Category": "Restaurant ",
+    "Price (8.4oz)": 3.61,
+    "Longitude": 40.755173,
+    "Latitude": -73.9919045,
+    "Purchase_date": "2025-11-11T05:00:00.000Z",
+    "neighborhood": "Midtown"
+  },
+  {
+    "Index": 7,
+    "Location": "Fares Grocery Deli",
+    "Category": "Bodega",
+    "Price (8.4oz)": 3.12,
+    "Longitude": 40.6723254,
+    "Latitude": -73.9600774,
+    "Purchase_date": "2026-03-27T04:00:00.000Z",
+    "neighborhood": "Crown heights"
+  },
+  {
+    "Index": 8,
+    "Location": "Deli Delights Mini Market",
+    "Category": "Bodega",
+    "Price (8.4oz)": 3.64,
+    "Longitude": 40.725933,
+    "Latitude": -73.9865027,
+    "Purchase_date": "2026-01-31T05:00:00.000Z",
+    "neighborhood": "Alphabet City "
+  },
+  {
+    "Index": 9,
+    "Location": "89 Convenience Mart",
+    "Category": "Bodega",
+    "Price (8.4oz)": 3.95,
+    "Longitude": 40.7899225,
+    "Latitude": -73.9774098,
+    "Purchase_date": "2026-04-18T04:00:00.000Z",
+    "neighborhood": "UWS"
+  }
+]

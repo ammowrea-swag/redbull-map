@@ -1,34 +1,42 @@
-/* Global styles for NYCity News Service style site */
+
 /* These apply to every page */
 
 /* ---------- SCSS Imports ---------- */
 @use '$lib/styles' as *;
 
 /* ---------- Google Fonts ---------- */
-@import url('https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Droid+Sans:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fauna+One&family=PT+Sans+Narrow:wght@400;700&family=Quicksand:wght@300..700&display=swap');
 
 /* ===========================================
    CSS Custom Properties
    =========================================== */
 :root {
-  /* NYCity News Service Colors */
-  --color-accent: #0033a1; /* CUNY Blue (PMS 286) */
-  --color-dark: #1a1a1a;
+  /* RedBull Colors */
+  --color-dark-blue: #385b9f; 
+  --color-dark-red: #D2003c;
+  --color-gold: #f1d595;
+  --color-baby-blue: #a4cadb;
+  --color-dark-yellow: #dbb744;
+  --color-dark: #000000;
   --color-text: #333333;
   --color-white: #ffffff;
-  --color-light-gray: #f5f5f5;
+  --color-silver: #dddddd;
   --color-medium-gray: #666666;
-  --color-border: #e0e0e0;
   --color-shadow: rgba(0, 0, 0, 0.1);
 
-  /* CUNY Blue Gradient Colors */
-  --color-cuny-blue-dark: #002266;
-  --color-cuny-blue-light: #0066cc;
+  /* Cool Gradiant */
+  --color-lightest-blue: #dbf9fc;
+  --color-medium-blue: #385b9f;
+
+  /* Warm Gradiant */
+  --color-orange: #fdbb84;
+  --color-medium-red: #d02b48;
+
 
   /* Typography */
-  --font-serif: 'PT Serif', Georgia, 'Times New Roman', Times, serif;
+  --font-serif: 'Fauna One', 'Times New Roman', serif;
   --font-sans:
-    'Droid Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    'PT Sans Narrow', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 
   /* Root Font Sizes */
@@ -120,21 +128,6 @@
 }
 
 /* ===========================================
-   Dropcap Gradient Animation
-   =========================================== */
-@keyframes dropcap-gradient {
-  0% {
-    background-position: 0% 0%;
-  }
-  50% {
-    background-position: 100% 0%;
-  }
-  100% {
-    background-position: 0% 0%;
-  }
-}
-
-/* ===========================================
    CSS Reset
    =========================================== */
 *,
@@ -191,13 +184,13 @@ p {
 }
 
 a {
-  color: var(--color-dark);
+  color: var(--color-dark-red);
   text-decoration: underline;
   transition: var(--transition-color);
 }
 
 a:hover {
-  color: var(--color-accent);
+  color: var(--color-dark-blue);
 }
 
 img {
@@ -238,4 +231,35 @@ img {
   h3 {
     font-size: var(--font-size-xl);
   }
+}
+.fauna-one-regular {
+  font-family: "Fauna One", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.quicksand-300 {
+  font-family: "Quicksand", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.quicksand-700{
+  font-family: "Quicksand", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.pt-sans-narrow-regular {
+  font-family: "PT Sans Narrow", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.pt-sans-narrow-bold {
+  font-family: "PT Sans Narrow", sans-serif;
+  font-weight: 700;
+  font-style: normal;
 }
