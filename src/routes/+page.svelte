@@ -6,16 +6,40 @@ This is your page!
   // Import all the news furniture components
   import ArticleHeader from '$lib/components/Article/ArticleHeader.svelte';
   import ArticleBody from '$lib/components/Article/ArticleBody.svelte';
-  import Image from '$lib/components/Media/Image.svelte'; 
-  import { defineMeta } from '@storybook/addon-svelte-csf';
   import MethodologyBox from '$lib/components/Article/MethodologyBox.svelte';
+  import Map from '$lib/components/Maps/Map.svelte';
+  import MapLayer from '$lib/components/Maps/MapLayer.svelte';
+
+  let { data } = $props();
 
   // Article metadata
   let headline = 'Got RedBull?';
   let byline = 'Ashley Mowreader';
   let pubDate = '2026-05';
+  // NYC default center
+  const NYC_LNG = -74.006;
+  const NYC_LAT = 40.7128;
+  const NYC_ZOOM = 10;
 
+  // Reactive map state
+  let mapLng = $state(NYC_LNG);
+  let mapLat = $state(NYC_LAT);
+  let mapZoom = $state(NYC_ZOOM);
+  let hasResult = $state(false);
+
+  const redbullPoints = $derived.by(() => ({
+    type: 'FeatureCollection',
+    features: (data.redbull ?? []).map((entry) => ({
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [entry.Latitude, entry.Longitude],
+      },
+      properties: entry,
+    })),
+  }));
  </script>
+
 <!-- This sets the page title in the browser tab -->
 <svelte:head>
   <title>{headline} | Ashley Mowreader </title>
@@ -47,7 +71,30 @@ This is your page!
   
   </ArticleBody>
 
-      <MethodologyBox title="Sources and Methodology">
+  <Map 
+        longitude={mapLng}
+        latitude={mapLat}
+        zoom={mapZoom}
+        theme="fiord"
+        caption={hasResult
+          ? `Showing results near ${mapLat.toFixed(4)}, ${mapLng.toFixed(4)}`
+          : ''}
+        credit="OpenFreeMap / OpenStreetMap contributors"
+      >
+        <MapLayer
+          id="search-result-marker"
+          type="circle"
+          data={redbullPoints}
+          paint={{
+            'circle-radius': 10,
+            'circle-color': '#D2003c',
+            'circle-stroke-width': 3,
+            'circle-stroke-color': '#ffffff',
+          }}
+        />
+      </Map>
+
+      <MethodologyBox title="Methodology">
       <p>
         All data was independently collected by the author through in-person visits to various locations across New York City. Prices were recorded in USD and reflect the cost of an 8oz can of RedBull at each location as of the date of purchase. Data collection is ongoing, and prices may vary over time due to promotions, location-based pricing, or changes in supplier costs.
 
