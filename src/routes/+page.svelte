@@ -51,6 +51,8 @@ This is your page!
 
 <!-- Your page content goes here -->
 <div class="container">
+
+  <img src="src/img/pope-redbull.svg" alt="Pope Francis holds a RedBull can aloft" size="medium" />
   <!-- Article Header: Headline, byline, and publication date -->
   <ArticleHeader {headline} {byline} {pubDate} />
 

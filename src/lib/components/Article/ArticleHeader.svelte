@@ -151,4 +151,18 @@ USAGE EXAMPLE:
       gap: var(--spacing-sm);
     }
   }
+
+  /* Center and enlarge the headline when used inside ArticleHeader */
+  .article-header :global(.headline) {
+    text-align: center;
+    font-size: var(--font-size-display);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  @include tablet {
+    .article-header :global(.headline) {
+      font-size: calc(var(--font-size-display) + 0.5rem);
+    }
+  }
 </style>
