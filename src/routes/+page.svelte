@@ -7,6 +7,7 @@ This is your page!
   import ArticleHeader from '$lib/components/Article/ArticleHeader.svelte';
   import ArticleBody from '$lib/components/Article/ArticleBody.svelte';
   import MethodologyBox from '$lib/components/Article/MethodologyBox.svelte';
+  import Image from '$lib/components/Media/Image.svelte';
   import Map from '$lib/components/Maps/Map.svelte';
   import MapLayer from '$lib/components/Maps/MapLayer.svelte';
 
@@ -52,7 +53,9 @@ This is your page!
 <!-- Your page content goes here -->
 <div class="container">
 
-  <img src="src/img/pope-redbull.svg" alt="Pope Francis holds a RedBull can aloft" size="medium" />
+  <Image src="/pope-redbull.svg" alt="Pope Francis holds a RedBull can aloft" size="medium" align="center"/>
+
+
   <!-- Article Header: Headline, byline, and publication date -->
   <ArticleHeader {headline} {byline} {pubDate} />
 
@@ -111,5 +114,7 @@ This is your page!
         >.
       </p>
     </MethodologyBox>
+
+    <Image src="/crumpled-can.svg" alt="A crumpled RedBull can" size="small" style="max-width: 20px" />
 
 </div>
