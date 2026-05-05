@@ -20,6 +20,24 @@ import { defineConfig } from 'vite';
 export default defineConfig(({ mode }) => ({
   plugins: [mode === 'test' ? svelte({ hot: false }) : sveltekit(), ViteYaml()],
   ...(mode === 'test' ? { resolve: { conditions: ['browser'] } } : {}),
+  build: {
+    chunkSizeWarningLimit: 1000, // Increase warning limit to 1000 kB
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Split large components into separate chunks
+          'components-media': [
+            'src/lib/components/Media/Image.svelte',
+            'src/lib/components/Media/Diptych.svelte',
+          ],
+          'components-maps': [
+            'src/lib/components/Maps/Map.svelte',
+            'src/lib/components/Maps/MapLayer.svelte',
+          ],
+        },
+      },
+    },
+  },
   test: {
     environment: 'jsdom',
     include: ['src/**/*.test.js'],
