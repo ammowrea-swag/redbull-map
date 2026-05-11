@@ -68,10 +68,12 @@ This is your page!
 </svelte:head>
 
 <!-- Your page content goes here -->
+<!-- Full-width header that bleeds across the page -->
+<div class="header-bleed">
+  <Image src="/pope-redbull.svg" alt="Pope Francis holds a RedBull can aloft" align="center"/>
+</div>
+
 <div class="container">
-
-  <Image src="/pope-redbull.svg" alt="Pope Francis holds a RedBull can aloft" size="medium" align="center"/>
-
 
   <!-- Article Header: Headline, byline, and publication date -->
   <ArticleHeader {headline} {byline} {pubDate} />

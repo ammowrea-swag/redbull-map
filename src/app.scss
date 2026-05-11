@@ -214,6 +214,17 @@ img {
 }
 
 /* ===========================================
+   Header Bleed (full-width image)
+   =========================================== */
+.header-bleed {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  margin-top: 0;
+  padding: 0;
+  margin-bottom: calc(var(--spacing-md) * -0.5);
+}
+
+/* ===========================================
    Responsive Typography
    =========================================== */
 @include mobile {
