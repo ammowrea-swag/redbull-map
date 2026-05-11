@@ -37,7 +37,7 @@
     "Longitude": 40.6826505,
     "Latitude": -73.9779959,
     "Purchase_date": "",
-    "neighborhood": ""
+    "neighborhood": "Prospect Heights"
   },
   {
     "Index": 5,
@@ -87,6 +87,6 @@
     "Longitude": 40.7899225,
     "Latitude": -73.9774098,
     "Purchase_date": "2026-04-18T04:00:00.000Z",
-    "neighborhood": "UWS"
+    "neighborhood": "Upper West Side"
   }
 ]
