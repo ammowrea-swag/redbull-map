@@ -184,7 +184,7 @@ p {
 }
 
 a {
-  color: var(--color-dark-red);
+  color: var(--color-dark-blue);
   text-decoration: underline;
   transition: var(--transition-color);
 }
@@ -262,4 +262,36 @@ img {
   font-family: "PT Sans Narrow", sans-serif;
   font-weight: 700;
   font-style: normal;
+}
+
+/* Map popup styling: background + outline per user request */
+.maplibregl-popup,
+.mapboxgl-popup {
+  background: transparent !important;
+}
+
+/* target the content container and make rules specific/important so they win */
+.maplibregl-popup > .maplibregl-popup-content,
+.mapboxgl-popup > .mapboxgl-popup-content,
+.maplibregl-popup-content,
+.mapboxgl-popup-content {
+  background: #f1d595 !important;
+  border: 3px solid #D2003c !important;
+  color: var(--color-dark) !important;
+  border-radius: 6px !important;
+  padding: 0.5rem 0.6rem !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12) !important;
+  display: block !important;
+}
+
+.maplibregl-popup-tip,
+.mapboxgl-popup-tip {
+  /* Make the triangular tip match the popup background */
+  border-top-color: #f1d595 !important;
+  border-bottom-color: #f1d595 !important;
+}
+
+.maplibregl-popup-close-button,
+.mapboxgl-popup-close-button {
+  color: #D2003c !important;
 }

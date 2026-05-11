@@ -75,13 +75,13 @@ USAGE EXAMPLE:
 
   /* Links within article body */
   .article-body :global(a) {
-    color: var(--color-dark);
+    color: var(--color-dark-blue);
     text-decoration: underline;
     text-underline-offset: 2px;
   }
 
   .article-body :global(a:hover) {
-    color: var(--color-accent);
+    color: var(--color-dark-blue);
   }
 
   /* Subheadings within article */

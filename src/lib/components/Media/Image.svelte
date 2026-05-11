@@ -38,6 +38,7 @@ USAGE EXAMPLE:
   class:size-large={size === 'large'}
   class:size-medium={size === 'medium'}
   class:size-small={size === 'small'}
+  class:size-tiny={size === 'tiny'}
 >
   <img src={resolvedSrc} {alt} class="image" loading="lazy" />
 
@@ -91,9 +92,17 @@ USAGE EXAMPLE:
     margin-right: auto;
   }
 
+  .size-tiny {
+    width: 100%;
+    max-width: 75px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
   .image-figure.size-large,
   .image-figure.size-medium,
-  .image-figure.size-small {
+  .image-figure.size-small,
+  .image-figure.size-tiny {
     margin-left: auto;
     margin-right: auto;
   }

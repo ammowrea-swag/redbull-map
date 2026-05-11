@@ -53,12 +53,12 @@ of an article.
   }
 
   .methodology-body :global(a) {
-    color: var(--color-accent);
+    color: var(--color-dark-blue);
     text-decoration: underline;
   }
 
   .methodology-body :global(a:hover) {
-    color: var(--color-dark);
+    color: var(--color-dark-blue);
   }
 
   @include tablet {

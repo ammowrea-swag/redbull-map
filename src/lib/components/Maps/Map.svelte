@@ -10,7 +10,7 @@ USAGE EXAMPLE:
 <Map
   longitude={-74.006}
   latitude={40.7128}
-  zoom={10}
+  zoom={5}
   theme="liberty"
 >
   <MapLayer
@@ -38,6 +38,8 @@ USAGE EXAMPLE:
     longitude = -74.006, // Map center longitude (default: NYC)
     latitude = 40.7128, // Map center latitude
     zoom = 10, // Initial zoom level (0–22)
+    bounds = null, // Optional [[west, south], [east, north]] bounds to fit on load
+    fitBoundsOptions = { padding: 48, duration: 0, essential: true },
     theme = 'liberty', // Basemap theme: 'liberty' | 'bright' | 'positron' | 'fiord' | 'dark'
     interactive = true, // Allow panning and zooming
     border = false, // Show an accent border around the map
@@ -120,6 +122,7 @@ USAGE EXAMPLE:
   // Reactively update center and zoom when props change
   $effect(() => {
     if (!map) return;
+    if (bounds) return;
 
     const center = map.getCenter();
     const centerChanged =
@@ -133,6 +136,21 @@ USAGE EXAMPLE:
       center: [longitude, latitude],
       zoom,
       essential: true,
+    });
+  });
+
+  // Fit the viewport to supplied bounds and lock the minimum zoom there.
+  let appliedBoundsKey = '';
+  $effect(() => {
+    if (!map || !mapReady || !bounds) return;
+
+    const boundsKey = JSON.stringify(bounds);
+    if (boundsKey === appliedBoundsKey) return;
+
+    appliedBoundsKey = boundsKey;
+    map.fitBounds(bounds, fitBoundsOptions);
+    map.once('moveend', () => {
+      map.setMinZoom(map.getZoom());
     });
   });
 

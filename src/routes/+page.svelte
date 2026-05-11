@@ -10,6 +10,7 @@ This is your page!
   import Image from '$lib/components/Media/Image.svelte';
   import Map from '$lib/components/Maps/Map.svelte';
   import MapLayer from '$lib/components/Maps/MapLayer.svelte';
+  import Legend from '$lib/components/Maps/Legend.svelte';
 
   let { data } = $props();
 
@@ -39,6 +40,22 @@ This is your page!
       properties: entry,
     })),
   }));
+
+  const redbullBounds = $derived.by(() => {
+    const coordinates = redbullPoints.features
+      .map((feature) => feature.geometry?.coordinates)
+      .filter((coordinate) => Array.isArray(coordinate) && coordinate.length === 2);
+
+    if (!coordinates.length) return null;
+
+    const longitudes = coordinates.map(([longitude]) => longitude);
+    const latitudes = coordinates.map(([, latitude]) => latitude);
+
+    return [
+      [Math.min(...longitudes), Math.min(...latitudes)],
+      [Math.max(...longitudes), Math.max(...latitudes)],
+    ];
+  });
  </script>
 
 <!-- This sets the page title in the browser tab -->
@@ -76,10 +93,19 @@ This is your page!
   
   </ArticleBody>
 
+  <Image src="/header.svg" alt="An illustrated RedBull Can logo and bull" q size="large" align="center"/>
+
+  <div class= "description" align="center" style="italics"> 
+  <p> Click on a dot to see details of my Redbull purchases across the city, including date of purchase, neighborhood and price.</p>
+  </div>
+
+   <!-- Map component with interactive MapLayer and popups -->
+
   <Map 
         longitude={mapLng}
         latitude={mapLat}
         zoom={mapZoom}
+        bounds={redbullBounds}
         theme="fiord"
         caption={hasResult
           ? `Showing results near ${mapLat.toFixed(4)}, ${mapLng.toFixed(4)}`
@@ -92,16 +118,38 @@ This is your page!
           data={redbullPoints}
           paint={{
             'circle-radius': 10,
-            'circle-color': '#D2003c',
+            'circle-color': '#f1d595',
             'circle-stroke-width': 3,
-            'circle-stroke-color': '#ffffff',
+            'circle-stroke-color': '#D2003c',
           }}
+           popup={(feature) => {
+            const p = feature.properties ?? {};
+            const location = p.Location ?? 'RedBull stop';
+            const category = p.Category ? p.Category.trim() : '';
+            const neighborhood = p.neighborhood ? p.neighborhood.trim() : '';
+            const price = p['Price (8.4oz)'] ?? 'N/A';
+            const purchaseDate = p.Purchase_date
+              ? new Date(p.Purchase_date).toLocaleDateString('en-US', {
+                  month: 'short',
+                  day: 'numeric',
+                  year: 'numeric',
+                })
+              : '';
+
+            return `
+              <strong>${location}</strong><br/>
+              ${category ? `${category}<br/>` : ''}
+              Price: $${price}<br/>
+              ${neighborhood ? `Neighborhood: ${neighborhood}<br/>` : ''}
+              ${purchaseDate ? `Purchased: ${purchaseDate}` : ''}
+            `;
+  }}
         />
       </Map>
 
       <MethodologyBox title="Methodology">
       <p>
-        All data was independently collected by the author through in-person visits to various locations across New York City. Prices were recorded in USD and reflect the cost of an 8oz can of RedBull at each location as of the date of purchase. Data collection is ongoing, and prices may vary over time due to promotions, location-based pricing, or changes in supplier costs.
+        All data was independently collected by the author through in-person visits to various locations across New York City.  Prices were recorded in USD and reflect the cost of an 8oz can of RedBull at each location as of the date of purchase. Data collection is ongoing, and prices may vary over time due to promotions, location-based pricing, or changes in supplier costs.
 
         
         <a href="https://docs.google.com/spreadsheets/d/1ExMy09OCWdxAQUVO92dmCfXj5p3VVGZ_7wFrs9xuHDc/edit?usp=sharing">See the full dataset here</a> 
@@ -115,6 +163,11 @@ This is your page!
       </p>
     </MethodologyBox>
 
-    <Image src="/crumpled-can.svg" alt="A crumpled RedBull can" size="small" style="max-width: 20px" />
+    <div class ="footer"> 
+
+    <Image src="/cans.svg" alt="Two full redbull cans and a crumpled empty can" size="medium" align="center"/>
+
+        </div>
+
 
 </div>

@@ -37,57 +37,12 @@ USAGE EXAMPLE:
     <div class="meta">
       {#if byline}
         <div class="meta-item meta-byline">
-          <svg
-            class="meta-icon"
-            viewBox="0 0 24 24"
-            width="16"
-            height="16"
-            aria-hidden="true"
-          >
-            <path
-              d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            />
-            <circle
-              cx="12"
-              cy="7"
-              r="4"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            />
-          </svg>
           <Byline {byline} />
         </div>
       {/if}
 
       {#if pubDate}
         <div class="meta-item meta-date">
-          <svg
-            class="meta-icon"
-            viewBox="0 0 24 24"
-            width="16"
-            height="16"
-            aria-hidden="true"
-          >
-            <circle
-              cx="12"
-              cy="12"
-              r="10"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            />
-            <path
-              d="M12 6v6l4 2"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-            />
-          </svg>
           <Pubdate date={pubDate} />
         </div>
       {/if}
@@ -116,11 +71,6 @@ USAGE EXAMPLE:
     display: inline-flex;
     align-items: center;
     gap: var(--spacing-xs);
-  }
-
-  .meta-icon {
-    color: var(--color-accent);
-    flex-shrink: 0;
   }
 
   /* Override Byline styles inside the meta box */
