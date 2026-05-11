@@ -108,6 +108,7 @@ This is your page!
         latitude={mapLat}
         zoom={mapZoom}
         bounds={redbullBounds}
+        interactive={false}
         theme="fiord"
         caption={hasResult
           ? `Showing results near ${mapLat.toFixed(4)}, ${mapLng.toFixed(4)}`
