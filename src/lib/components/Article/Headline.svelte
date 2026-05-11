@@ -22,8 +22,8 @@ USAGE EXAMPLE:
   @use '../../styles' as *;
 
   .headline {
-    font-family: var(--font-serif);
-    font-size: var(--font-size-5xl);
+    font-family: var(--font-sans-serif);
+    font-size: var(--font-size-6xl);
     font-weight: var(--font-weight-bold);
     line-height: var(--leading-tight);
     color: var(--color-dark);

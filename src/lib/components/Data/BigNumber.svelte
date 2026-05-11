@@ -16,8 +16,8 @@
   .big-number {
     text-align: center;
     padding: var(--spacing-md);
-    background-color: var(--color-accent);
-    color: var(--color-white);
+    background-color: var(--color-gold);
+    color: var(--color-dark-red);
     border-radius: var(--border-radius-sm);
   }
 
@@ -25,7 +25,7 @@
     display: block;
     font-size: var(--font-size-display);
     font-weight: var(--font-weight-bold);
-    color: var(--color-white);
+    color: var(--color-dark-blue);
     line-height: var(--leading-heading);
   }
 
@@ -40,7 +40,7 @@
   .footnote {
     display: block;
     font-size: var(--font-size-xs);
-    color: var(--color-white);
+    color: var(--color-dark-red);
     margin-top: var(--spacing-xxs);
     font-style: italic;
   }

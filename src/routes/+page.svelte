@@ -11,11 +11,13 @@ This is your page!
   import Map from '$lib/components/Maps/Map.svelte';
   import MapLayer from '$lib/components/Maps/MapLayer.svelte';
   import Legend from '$lib/components/Maps/Legend.svelte';
+  import BigNumber from '$lib/components/Data/BigNumber.svelte';
+  import Dashboard from '$lib/components/Data/Dashboard.svelte';
 
   let { data } = $props();
 
   // Article metadata
-  let headline = 'Got RedBull?';
+  let headline = 'Got Red Bull?';
   let byline = 'Ashley Mowreader';
   let pubDate = '2026-05';
   // NYC default center
@@ -63,14 +65,14 @@ This is your page!
   <title>{headline} | Ashley Mowreader </title>
   <meta
     name="description"
-    content="An interactive map of New York City and relative RedBull prices at various locations around the city."
+    content="An interactive map of New York City and relative Red Bull prices at various locations around the city."
   />
 </svelte:head>
 
 <!-- Your page content goes here -->
 <!-- Full-width header that bleeds across the page -->
 <div class="header-bleed">
-  <Image src="/pope-redbull.svg" alt="Pope Francis holds a RedBull can aloft" align="center"/>
+  <Image src="/pope-redbull.svg" alt="Pope Francis holds a Red Bull can aloft" align="center"/>
 </div>
 
 <div class="container">
@@ -81,25 +83,42 @@ This is your page!
   <!-- Article Body: The main story text with proper typography -->
   <ArticleBody>
    <p> 
-    As a native Washingtonian, there's few beverages that make me more nostalgic rainy, overcast days in the Puget Sound, surrounded by towering pine trees than a RedBull over ice. Coloquially called a "RedBull Italian soda," just about any drive-thru coffee shop in Washington, Oregon or Idaho can help you meet your craving for a sugar-loaded energy drink, plus extra sugar syrups, and maybe a splash of juice or lemonade (or heavy cream if you're literally insane). My go-to is strawberry and peach syrup and a splash of orange juice. 
+    As a native Washingtonian, there's few beverages that make me more nostalgic rainy, overcast days in the Puget Sound, surrounded by towering pine trees than a Red Bull over ice. Coloquially called a "Red Bull Italian soda," just about any drive-thru coffee shop in Washington, Oregon or Idaho can help you meet your craving for a sugar-loaded energy drink, plus extra sugar syrups, and maybe a splash of juice or lemonade (or heavy cream if you're literally insane). My go-to is strawberry and peach syrup and a splash of orange juice. 
     </p>
     <p>
       When I studied abroad in Argentina, RedBull cans became a go-to grab to quell homesickness, and since moving to the East Coast, RedBulls remain an afternoon pick-me-up, never wavering in their flavor in that tiny silver tube. 
     </p>
     <p>
-      But one thing does change about RedBull at every purchase: the price. New York is known as an unaffordable city and the upcharge on my 8oz RedBull can has started to strain my wallet. So, like any good data journalist, I've decided to map out the price of RedBull across the city to figure out exactly steep the cost can rise.
+      But one thing does change about Red Bull at every purchase: the price. New York is known as an unaffordable city and the upcharge on my 8oz Red Bull can has started to strain my wallet. So, like any good data journalist, I've decided to map out the price of Red Bull across the city to figure out exactly steep the cost can rise.
       </p>
         <p>
-          This data set is growing and evolving with every RedBull I purchase, check back in and see if I've explored your neighboorhood joint to quench my RedBull addiction.
+          This data set is growing and evolving with every Red Bull I purchase, check back in and see if I've explored your neighboorhood joint to quench my Red Bull addiction.
         </p>
   
   </ArticleBody>
 
-  <Image src="/header.svg" alt="An illustrated RedBull Can logo and bull" q size="large" align="center"/>
+  <Image src="/header.svg" alt="An illustrated Red Bull Can logo and bull" q size="large" align="center"/>
 
   <div class= "description" align="center" style="italics"> 
-  <p> Click on a dot to see details of my Redbull purchases across the city, including date of purchase, neighborhood and price.</p>
+  <p> Click on a dot to see details of my Red Bull purchases across the city, including date of purchase, neighborhood and price.</p>
   </div>
+
+  <Dashboard>
+  <BigNumber
+    number=10
+    label="Red Bull Purchases Mapped"
+    />
+
+    <BigNumber 
+    number="$TK"
+    label="Most Expensive Red Bull"
+    />
+
+    <BigNumber
+    number="$TKs"
+    label="Average Red Bull Price"
+    />
+</Dashboard>
 
    <!-- Map component with interactive MapLayer and popups -->
 
@@ -168,9 +187,9 @@ This is your page!
 
     <div class ="footer"> 
 
-    <Image src="/cans.svg" alt="Two full redbull cans and a crumpled empty can" size="medium" align="center"/>
+    <Image src="/cans.svg" alt="Two full Red Bull cans and a crumpled empty can" size="medium" align="center"/>
 
         </div>
 
-
+<p style="font-style: italic;" align="center"> All trademark rights to images, logos and fonts used belong to Red Bull; this webpage content is intended for educational and informational purposes only.  </p>
 </div>
