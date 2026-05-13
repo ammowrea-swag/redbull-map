@@ -1,59 +1,43 @@
+<!--
+  Progressbar.stories.svelte
 
-<script>
-  let { value = 0, label = 'Progress' } = $props();
+  Stories for the Progressbar component.
+  Progressbar displays a visual progress indicator with a label — perfect for
+  showing completion status or progress metrics.
 
-  // Clamp value between 0 and 100
-  const clampedValue = $derived(Math.max(0, Math.min(100, value)));
+  Props:
+  - value: The progress percentage 0-100 (number)
+  - label: Text label shown below the progress bar (string)
+-->
+<script module>
+  import { defineMeta } from '@storybook/addon-svelte-csf';
+  import Progressbar from '$lib/components/Data/Progressbar.svelte';
+
+  const { Story } = defineMeta({
+    title: 'Data/Progressbar',
+    component: Progressbar,
+    tags: ['autodocs'],
+    argTypes: {
+      value: {
+        control: { type: 'range', min: 0, max: 100, step: 1 },
+        description: 'Progress percentage from 0 to 100',
+      },
+      label: {
+        control: 'text',
+        description: 'Label text displayed below the progress bar',
+      },
+    },
+  });
 </script>
 
-<div class="progressbar-container">
-  <div class="progressbar-track">
-    <div class="progressbar-fill" style="width: {clampedValue}%"></div>
-  </div>
-  <div class="progressbar-label">{label}</div>
-</div>
+<!-- Default: 50% progress -->
+<Story name="Default" args={{ value: 50, label: 'Progress' }} />
 
-<style lang="scss">
-  @use '$lib/styles' as *;
+<!-- Empty: 0% progress -->
+<Story name="Empty" args={{ value: 0, label: 'Not Started' }} />
 
-  .progressbar-container {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-xs);
-  }
+<!-- Full: 100% progress -->
+<Story name="Full" args={{ value: 100, label: 'Complete' }} />
 
-  .progressbar-track {
-    width: 100%;
-    height: 24px;
-    background-color: var(--color-dark-blue);
-    border-radius: var(--radius-full, 9999px);
-    overflow: hidden;
-  }
-
-  .progressbar-fill {
-    height: 100%;
-    background-color: var(--color-dark-red);
-    transition: width 0.3s ease-out;
-  }
-
-  .progressbar-label {
-    font-size: var(--font-size-sm, 0.875rem);
-    color: var(--color-text);
-    padding: var(--spacing-xs) var(--spacing-sm);
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm, 4px);
-    text-align: center;
-  }
-
-  @include mobile {
-    .progressbar-track {
-      height: 20px;
-    }
-
-    .progressbar-label {
-      font-size: var(--font-size-xs, 0.75rem);
-    }
-  }
-
-</style>
+<!-- Partial: 75% progress -->
+<Story name="Partial" args={{ value: 75, label: 'Almost There' }} />
