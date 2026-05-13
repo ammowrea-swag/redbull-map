@@ -123,7 +123,7 @@ This is your page!
 <!-- Your page content goes here -->
 <!-- Full-width header that bleeds across the page -->
 <div class="header-bleed">
-  <Image src="/pope-redbull.svg" alt="Pope Francis holds a Red Bull can aloft" align="center"/>
+  <Image src="/redbull-nyc-dots.svg" alt="A can of Red Bull replaces the Empire State Building in the NYC skyline." align="center"/>
 </div>
 
 <div class="container">
@@ -135,7 +135,7 @@ This is your page!
   
   <ArticleBody>
 
-    <p> How much does nostalgia cost in New York City? According to my reporting, about $3.89.</p>
+    <p> How much does nostalgia cost in New York City? According to my reporting, about {averagePrice ? `$${averagePrice}` : '$TK'}.</p>
 
      <p> One of my favorite caffeinated beverages is an 8 oz can of Red Bull (original flavor, always.) But while the flavor of Red Bull doesn't waver, the price sure does across New York's five borough. So, like any good data journalist, I've decided to map out the price of Red Bull across the city to figure out exactly steep the cost can rise.
       </p>

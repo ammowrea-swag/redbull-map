@@ -11,7 +11,7 @@
   - data: GeoJSON FeatureCollection or Feature
   - paint: MapLibre paint properties object
   - layout: MapLibre layout properties object
-  - popup: Optional function (feature) => htmlString for hover popups
+  - popup: Optional function (feature) => htmlString for click popups
 -->
 <script module>
   import { defineMeta } from '@storybook/addon-svelte-csf';
@@ -182,13 +182,13 @@
   </Map>
 </Story>
 
-<!-- Popup: Hover a landmark to see a popup -->
+<!-- Popup: Click a landmark to see a popup -->
 <Story name="Popup" asChild>
   <Map
     longitude={-73.99}
     latitude={40.735}
     zoom={11}
-    caption="Hover a landmark to see a popup."
+    caption="Click a landmark to see a popup."
   >
     <MapLayer
       id="landmarks-popup"

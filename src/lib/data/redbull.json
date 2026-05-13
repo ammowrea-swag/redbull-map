@@ -26,7 +26,7 @@
     "Price (8.4oz)": 3.12,
     "Longitude": 40.6487302,
     "Latitude": -73.9541572,
-    "Purchase_date": "2026-03-07T05:00:00.000Z",
+    "Purchase_date": "2026-05-09T04:00:00.000Z",
     "neighborhood": "Flatbush"
   },
   {
@@ -88,5 +88,25 @@
     "Latitude": -73.9774098,
     "Purchase_date": "2026-04-18T04:00:00.000Z",
     "neighborhood": "Upper West Side"
+  },
+  {
+    "Index": 10,
+    "Location": "Hashi Market",
+    "Category": "Grocery",
+    "Price (8.4oz)": 3,
+    "Longitude": 40.7477135,
+    "Latitude": -73.9880794,
+    "Purchase_date": "2026-05-12T04:00:00.000Z",
+    "neighborhood": "Midtown"
+  },
+  {
+    "Index": 11,
+    "Location": "3 Times Square",
+    "Category": "Vending machine",
+    "Price (8.4oz)": 3.5,
+    "Longitude": 40.756572,
+    "Latitude": -73.9895825,
+    "Purchase_date": "2025-05-15T04:00:00.000Z",
+    "neighborhood": "Midtown"
   }
 ]

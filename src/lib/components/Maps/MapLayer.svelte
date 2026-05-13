@@ -7,8 +7,8 @@ obtain the MapLibre GL map instance, then adds a GeoJSON source and a
 styled layer. The layer is automatically removed when the component is
 destroyed or when the map style changes and reloads.
 
-Pass a `popup` template function to enable hover popups. The function
-receives the hovered feature and should return an HTML string.
+Pass a `popup` template function to enable click popups. The function
+receives the clicked feature and should return an HTML string.
 When `popup` is set, the cursor changes to a pointer while hovering
 over the layer so readers know it is interactive.
 
@@ -76,32 +76,60 @@ USAGE EXAMPLE:
     );
   }
 
-  /** Tracks the currently-open popup so we can close it when the hover ends. */
+  /** Tracks the currently-open popup so we can toggle it off when needed. */
   let openPopup = null;
+  let openPopupKey = null;
 
-  /** Handles hover on the layer: builds an HTML popup from the template function. */
-  function handlePopupOpen(e) {
+  function getFeatureKey(feature) {
+    if (!feature) return '';
+    if (feature.id !== undefined && feature.id !== null) return String(feature.id);
+    return JSON.stringify({ geometry: feature.geometry, properties: feature.properties });
+  }
+
+  /** Handles click on the layer: builds an HTML popup from the template function. */
+  function handlePopupClick(e) {
     if (!popup) return;
     const feature = e.features && e.features[0];
     if (!feature) return;
 
+    if (e.originalEvent && typeof e.originalEvent.stopPropagation === 'function') {
+      e.originalEvent.stopPropagation();
+    }
+
     const html = popup(feature);
     if (!html) return;
 
+    const featureKey = getFeatureKey(feature);
+
+    if (openPopup && openPopupKey === featureKey) {
+      openPopup.remove();
+      openPopup = null;
+      openPopupKey = null;
+      return;
+    }
+
     if (openPopup) openPopup.remove();
     openPopup = new maplibregl.Popup({
-      closeButton: false,
+      closeButton: true,
       closeOnClick: false,
     })
       .setLngLat(e.lngLat)
       .setHTML(html)
       .addTo(ctx.getMap());
+    openPopupKey = featureKey;
+
+    openPopup.on('close', () => {
+      openPopup = null;
+      openPopupKey = null;
+    });
   }
 
-  /** Updates the popup position while the pointer moves over the layer. */
-  function handleMouseMove(e) {
-    if (!popup || !openPopup) return;
-    openPopup.setLngLat(e.lngLat);
+  /** Closes the popup when the user clicks anywhere else on the map. */
+  function handleMapClickClose() {
+    if (!openPopup) return;
+    openPopup.remove();
+    openPopup = null;
+    openPopupKey = null;
   }
 
   /** Sets the cursor to a pointer while hovering over an interactive layer. */
@@ -142,9 +170,9 @@ USAGE EXAMPLE:
     });
 
     if (popup) {
-      map.on('mouseenter', validatedId, handlePopupOpen);
+      map.on('click', validatedId, handlePopupClick);
+      map.on('click', handleMapClickClose);
       map.on('mouseenter', validatedId, handleCursorEnter);
-      map.on('mousemove', validatedId, handleMouseMove);
       map.on('mouseleave', validatedId, handleMouseLeave);
     }
   }
@@ -155,9 +183,9 @@ USAGE EXAMPLE:
     if (!map) return;
 
     if (popup) {
-      map.off('mouseenter', validatedId, handlePopupOpen);
+      map.off('click', validatedId, handlePopupClick);
+      map.off('click', handleMapClickClose);
       map.off('mouseenter', validatedId, handleCursorEnter);
-      map.off('mousemove', validatedId, handleMouseMove);
       map.off('mouseleave', validatedId, handleMouseLeave);
     }
 
@@ -167,6 +195,7 @@ USAGE EXAMPLE:
     if (openPopup) {
       openPopup.remove();
       openPopup = null;
+      openPopupKey = null;
     }
   }
 
@@ -216,31 +245,16 @@ USAGE EXAMPLE:
     previousPaintKeys = currentKeys;
   });
 
-  // When a category is selected, make circle icons red; restore when 'all' is selected.
+  // Keep circle dots visually consistent regardless of category selection.
   $effect(() => {
     const map = ctx.getMap();
     if (!map || !map.getLayer(validatedId)) return;
-    // read reactive state
-    const sel = activeCategory;
     // Only applies to circle layers
     if (type !== 'circle') return;
 
-    // Resolve the CSS variable value for --color-dark-red
-    let red = getComputedStyle(document.documentElement).getPropertyValue('--color-dark-red') || '';
-    red = red.trim();
-
-    if (sel === 'all') {
-      // restore original color from `paint` prop if present
-      if ('circle-color' in paint) {
-        map.setPaintProperty(validatedId, 'circle-color', paint['circle-color']);
-      } else {
-        map.setPaintProperty(validatedId, 'circle-color', undefined);
-      }
-    } else {
-      // ensure we have a fallback color
-      const colorToSet = red || paint['circle-color'] || '#c00';
-      map.setPaintProperty(validatedId, 'circle-color', colorToSet);
-    }
+    map.setPaintProperty(validatedId, 'circle-color', '#f1d595');
+    map.setPaintProperty(validatedId, 'circle-stroke-width', 3);
+    map.setPaintProperty(validatedId, 'circle-stroke-color', '#D2003c');
   });
 
 onDestroy(() => {
