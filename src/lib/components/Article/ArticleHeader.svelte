@@ -11,6 +11,7 @@ USAGE EXAMPLE:
 <ArticleHeader
   headline="City Council Approves New Budget"
   kicker="City Hall"
+  dek="The new budget includes funding for affordable housing and public transit improvements."
   byline="Jane Smith, John Doe"
   pubDate="2024-01-15"
 />
@@ -20,10 +21,12 @@ USAGE EXAMPLE:
   import Headline from './Headline.svelte';
   import Byline from './Byline.svelte';
   import Pubdate from './Pubdate.svelte';
+  import Dek from './Dek.svelte';
 
   let {
     headline, // Required: The main title of the article
     kicker = '', // Optional: Eyebrow label rendered above the headline
+    dek = '', // Optional: Subheadline/summary
     byline = '', // Optional: The author's name(s)
     pubDate = '', // Optional: Publication date in YYYY-MM-DD format
   } = $props();
@@ -32,6 +35,7 @@ USAGE EXAMPLE:
 <header class="article-header">
   <Kicker text={kicker} />
   <Headline text={headline} />
+  <Dek text={dek} />
 
   {#if byline || pubDate}
     <div class="meta">

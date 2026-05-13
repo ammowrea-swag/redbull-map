@@ -7,10 +7,10 @@ obtain the MapLibre GL map instance, then adds a GeoJSON source and a
 styled layer. The layer is automatically removed when the component is
 destroyed or when the map style changes and reloads.
 
-Pass a `popup` template function to enable click-to-inspect popups. The
-function receives the clicked feature and should return an HTML string.
+Pass a `popup` template function to enable hover popups. The function
+receives the hovered feature and should return an HTML string.
 When `popup` is set, the cursor changes to a pointer while hovering
-over the layer so readers know it is clickable.
+over the layer so readers know it is interactive.
 
 USAGE EXAMPLE:
 <Map longitude={-74.006} latitude={40.7128} zoom={10}>
@@ -36,6 +36,7 @@ USAGE EXAMPLE:
   import { getContext, onDestroy } from 'svelte';
   import maplibregl from 'maplibre-gl';
 
+
   let {
     id, // Unique layer identifier (required)
     type = 'circle', // MapLibre layer type: 'circle' | 'fill' | 'line' | 'symbol'
@@ -43,7 +44,22 @@ USAGE EXAMPLE:
     paint = {}, // MapLibre paint properties
     layout = {}, // MapLibre layout properties
     popup = null, // Optional function (feature) => htmlString
+    activeCategory = 'all', // Active category for filtering (default: 'all')
   } = $props();
+
+  // Filter features by selected category
+  const filteredFeatures = $derived(
+    activeCategory === 'all'
+      ? data.features || []
+      : (data.features || []).filter(
+          (f) => f.properties && f.properties.Category && f.properties.Category.trim() === activeCategory
+        )
+  );
+
+  const filteredData = $derived({
+    ...data,
+    features: filteredFeatures,
+  });
 
   const validatedId = $derived.by(() => {
     if (typeof id !== 'string' || id.trim() === '') {
@@ -60,11 +76,11 @@ USAGE EXAMPLE:
     );
   }
 
-  /** Tracks the currently-open popup so we can close it when another click opens a new one. */
+  /** Tracks the currently-open popup so we can close it when the hover ends. */
   let openPopup = null;
 
-  /** Handles clicks on the layer: builds an HTML popup from the template function. */
-  function handleClick(e) {
+  /** Handles hover on the layer: builds an HTML popup from the template function. */
+  function handlePopupOpen(e) {
     if (!popup) return;
     const feature = e.features && e.features[0];
     if (!feature) return;
@@ -73,14 +89,23 @@ USAGE EXAMPLE:
     if (!html) return;
 
     if (openPopup) openPopup.remove();
-    openPopup = new maplibregl.Popup({ closeButton: true, closeOnClick: true })
+    openPopup = new maplibregl.Popup({
+      closeButton: false,
+      closeOnClick: false,
+    })
       .setLngLat(e.lngLat)
       .setHTML(html)
       .addTo(ctx.getMap());
   }
 
-  /** Sets the cursor to a pointer while hovering over a clickable layer. */
-  function handleMouseEnter() {
+  /** Updates the popup position while the pointer moves over the layer. */
+  function handleMouseMove(e) {
+    if (!popup || !openPopup) return;
+    openPopup.setLngLat(e.lngLat);
+  }
+
+  /** Sets the cursor to a pointer while hovering over an interactive layer. */
+  function handleCursorEnter() {
     if (!popup) return;
     const map = ctx.getMap();
     if (map) map.getCanvas().style.cursor = 'pointer';
@@ -101,9 +126,11 @@ USAGE EXAMPLE:
     if (map.getLayer(validatedId)) map.removeLayer(validatedId);
     if (map.getSource(validatedId)) map.removeSource(validatedId);
 
+
+    // Only show filtered features
     map.addSource(validatedId, {
       type: 'geojson',
-      data,
+      data: filteredData,
     });
 
     map.addLayer({
@@ -115,8 +142,9 @@ USAGE EXAMPLE:
     });
 
     if (popup) {
-      map.on('click', validatedId, handleClick);
-      map.on('mouseenter', validatedId, handleMouseEnter);
+      map.on('mouseenter', validatedId, handlePopupOpen);
+      map.on('mouseenter', validatedId, handleCursorEnter);
+      map.on('mousemove', validatedId, handleMouseMove);
       map.on('mouseleave', validatedId, handleMouseLeave);
     }
   }
@@ -127,8 +155,9 @@ USAGE EXAMPLE:
     if (!map) return;
 
     if (popup) {
-      map.off('click', validatedId, handleClick);
-      map.off('mouseenter', validatedId, handleMouseEnter);
+      map.off('mouseenter', validatedId, handlePopupOpen);
+      map.off('mouseenter', validatedId, handleCursorEnter);
+      map.off('mousemove', validatedId, handleMouseMove);
       map.off('mouseleave', validatedId, handleMouseLeave);
     }
 
@@ -155,7 +184,7 @@ USAGE EXAMPLE:
   $effect(() => {
     const map = ctx.getMap();
     if (!map) return;
-    const currentData = data; // read reactive prop
+    const currentData = filteredData; // read reactive data + category state
     const source = map.getSource(validatedId);
     if (source) {
       source.setData(currentData);
@@ -187,12 +216,42 @@ USAGE EXAMPLE:
     previousPaintKeys = currentKeys;
   });
 
-  onDestroy(() => {
-    ctx.offStyleLoad(handleStyleLoad);
-    removeLayer();
+  // When a category is selected, make circle icons red; restore when 'all' is selected.
+  $effect(() => {
+    const map = ctx.getMap();
+    if (!map || !map.getLayer(validatedId)) return;
+    // read reactive state
+    const sel = activeCategory;
+    // Only applies to circle layers
+    if (type !== 'circle') return;
+
+    // Resolve the CSS variable value for --color-dark-red
+    let red = getComputedStyle(document.documentElement).getPropertyValue('--color-dark-red') || '';
+    red = red.trim();
+
+    if (sel === 'all') {
+      // restore original color from `paint` prop if present
+      if ('circle-color' in paint) {
+        map.setPaintProperty(validatedId, 'circle-color', paint['circle-color']);
+      } else {
+        map.setPaintProperty(validatedId, 'circle-color', undefined);
+      }
+    } else {
+      // ensure we have a fallback color
+      const colorToSet = red || paint['circle-color'] || '#c00';
+      map.setPaintProperty(validatedId, 'circle-color', colorToSet);
+    }
   });
+
+onDestroy(() => {
+  ctx.offStyleLoad(handleStyleLoad);
+  removeLayer();
+});
+
+
 </script>
 
 <style lang="scss">
-  
+
 </style>
+

@@ -20,7 +20,7 @@ of an article.
 
   .methodology-box {
     border-top: var(--border-width-accent) solid var(--color-accent);
-    background-color: var(--color-light-gray);
+    background-color: var(--color-silver);
     padding: var(--spacing-md);
     margin-top: var(--spacing-xl);
     margin-bottom: var(--spacing-lg);

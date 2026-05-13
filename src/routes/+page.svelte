@@ -13,13 +13,15 @@ This is your page!
   import Legend from '$lib/components/Maps/Legend.svelte';
   import BigNumber from '$lib/components/Data/BigNumber.svelte';
   import Dashboard from '$lib/components/Data/Dashboard.svelte';
+  import Progressbar from '$lib/components/Data/Progressbar.svelte';
 
   let { data } = $props();
 
   // Article metadata
-  let headline = 'Got Red Bull?';
+  let headline = 'How Much Does A Can of Red Bull Cost in NYC?';
   let byline = 'Ashley Mowreader';
   let pubDate = '2026-05';
+  let dek = 'An interactive data project mapping Red Bull can prices across New York City.';
   // NYC default center
   const NYC_LNG = -74.006;
   const NYC_LAT = 40.7128;
@@ -30,6 +32,22 @@ This is your page!
   let mapLat = $state(NYC_LAT);
   let mapZoom = $state(NYC_ZOOM);
   let hasResult = $state(false);
+
+  // Category filter state
+  let activeCategory = $state('all');
+
+  // Extract unique categories from the data
+  const categories = $derived([
+    ...new Set(
+      (data.redbull ?? [])
+        .map((entry) => entry.Category && entry.Category.trim())
+        .filter(Boolean)
+    ),
+  ]);
+
+  function setCategory(category) {
+    activeCategory = category;
+  }
 
   const redbullPoints = $derived.by(() => ({
     type: 'FeatureCollection',
@@ -58,6 +76,39 @@ This is your page!
       [Math.max(...longitudes), Math.max(...latitudes)],
     ];
   });
+
+    // Filter data based on active category
+  const filteredData = $derived(
+    activeCategory === 'all'
+      ? data.redbull ?? []
+      : (data.redbull ?? []).filter(
+          (entry) => entry.Category && entry.Category.trim() === activeCategory
+        )
+  );
+
+  // Compute stats for visible data
+  const visibleCount = $derived(filteredData.length);
+  const mostExpensivePrice = $derived(
+    filteredData.length > 0
+      ? Math.max(...filteredData.map((entry) => entry['Price (8.4oz)'] || 0))
+      : null
+  );
+  const averagePrice = $derived(
+    filteredData.length > 0
+      ? (filteredData.reduce((sum, entry) => sum + (entry['Price (8.4oz)'] || 0), 0) / filteredData.length).toFixed(2)
+      : null
+  );
+
+  // for progress bar
+  const progressStats = $derived.by(() => {
+    const total = data.redbull?.length || 0;
+    const maxEntries = 100;
+    return {
+      value: (total / maxEntries) * 100,
+      label: `${total} Red Bull Locations Mapped out of 100`,
+    };
+  });
+
  </script>
 
 <!-- This sets the page title in the browser tab -->
@@ -78,50 +129,70 @@ This is your page!
 <div class="container">
 
   <!-- Article Header: Headline, byline, and publication date -->
-  <ArticleHeader {headline} {byline} {pubDate} />
+  <ArticleHeader {headline} {byline} {pubDate} {dek} />
 
   <!-- Article Body: The main story text with proper typography -->
+  
   <ArticleBody>
-   <p> 
-    As a native Washingtonian, there's few beverages that make me more nostalgic rainy, overcast days in the Puget Sound, surrounded by towering pine trees than a Red Bull over ice. Coloquially called a "Red Bull Italian soda," just about any drive-thru coffee shop in Washington, Oregon or Idaho can help you meet your craving for a sugar-loaded energy drink, plus extra sugar syrups, and maybe a splash of juice or lemonade (or heavy cream if you're literally insane). My go-to is strawberry and peach syrup and a splash of orange juice. 
-    </p>
-    <p>
-      When I studied abroad in Argentina, RedBull cans became a go-to grab to quell homesickness, and since moving to the East Coast, RedBulls remain an afternoon pick-me-up, never wavering in their flavor in that tiny silver tube. 
-    </p>
-    <p>
-      But one thing does change about Red Bull at every purchase: the price. New York is known as an unaffordable city and the upcharge on my 8oz Red Bull can has started to strain my wallet. So, like any good data journalist, I've decided to map out the price of Red Bull across the city to figure out exactly steep the cost can rise.
+
+    <p> How much does nostalgia cost in New York City? According to my reporting, about $3.89.</p>
+
+     <p> One of my favorite caffeinated beverages is an 8 oz can of Red Bull (original flavor, always.) But while the flavor of Red Bull doesn't waver, the price sure does across New York's five borough. So, like any good data journalist, I've decided to map out the price of Red Bull across the city to figure out exactly steep the cost can rise.
       </p>
         <p>
-          This data set is growing and evolving with every Red Bull I purchase, check back in and see if I've explored your neighboorhood joint to quench my Red Bull addiction.
+          This data set is growing and evolving with every Red Bull I purchase, check back in and see if I've explored your neighborhood joint to quench my Red Bull addiction.
         </p>
-  
   </ArticleBody>
-
+  
   <Image src="/header.svg" alt="An illustrated Red Bull Can logo and bull" q size="large" align="center"/>
 
-  <div class= "description" align="center" style="italics"> 
-  <p> Click on a dot to see details of my Red Bull purchases across the city, including date of purchase, neighborhood and price.</p>
+  <div class= "description" align="center"> 
+  <p style="font-style: italic;"> Hover over a dot to see details of my Red Bull purchases across the city, including date of purchase, neighborhood and price. Or, sort the data by purchase location and see how trends differ.</p>
   </div>
 
   <Dashboard>
-  <BigNumber
-    number=10
-    label="Red Bull Purchases Mapped"
+    <BigNumber
+      number={visibleCount}
+      label="Red Bull Purchases Logged"
+    />
+
+ <BigNumber
+      number={averagePrice ? `$${averagePrice}` : '$TK'}
+      label="Average Red Bull Price"
     />
 
     <BigNumber 
-    number="$TK"
-    label="Most Expensive Red Bull"
+      number={mostExpensivePrice ? `$${mostExpensivePrice.toFixed(2)}` : '$TK'}
+      label="Most Expensive Red Bull"
     />
+   
+  </Dashboard>
 
-    <BigNumber
-    number="$TKs"
-    label="Average Red Bull Price"
-    />
-</Dashboard>
+  <!-- Category filter pills -->
+  <div class="category-filters" aria-label="Map categories">
+    <button
+      type="button"
+      class:active={activeCategory === 'all'}
+      onclick={() => setCategory('all')}
+      align="center"
+    >
+      All
+    </button>
+
+    {#each categories as category}
+      <button
+        type="button"
+        class:active={activeCategory === category}
+        onclick={() => setCategory(category)}
+      >
+        {category}
+      </button>
+    {/each}
+  </div>
 
    <!-- Map component with interactive MapLayer and popups -->
 
+   <div class="map-container">
   <Map 
         longitude={mapLng}
         latitude={mapLat}
@@ -138,6 +209,7 @@ This is your page!
           id="search-result-marker"
           type="circle"
           data={redbullPoints}
+          activeCategory={activeCategory}
           paint={{
             'circle-radius': 10,
             'circle-color': '#f1d595',
@@ -168,8 +240,9 @@ This is your page!
   }}
         />
       </Map>
+    </div>
 
-      <MethodologyBox title="Methodology">
+    <MethodologyBox title="Methodology">
       <p>
         All data was independently collected by the author through in-person visits to various locations across New York City.  Prices were recorded in USD and reflect the cost of an 8oz can of RedBull at each location as of the date of purchase. Data collection is ongoing, and prices may vary over time due to promotions, location-based pricing, or changes in supplier costs.
 
@@ -185,11 +258,66 @@ This is your page!
       </p>
     </MethodologyBox>
 
-    <div class ="footer"> 
+    <ArticleBody>
+
+      <h2> Why Red Bull? </h2>
+   <p> 
+    As a native Washingtonian, there's few beverages that make me more nostalgic rainy, overcast days in the Puget Sound, surrounded by towering pine trees than a Red Bull over ice. Coloquially called a "Red Bull Italian soda," just about any drive-thru coffee shop in Washington, Oregon or Idaho can help you meet your craving for a sugar-loaded energy drink, plus extra sugar syrups, and maybe a splash of juice or lemonade (or heavy cream if you're literally insane). My go-to is strawberry and peach syrup and a splash of orange juice. 
+    </p>
+    <p>
+      When I studied abroad in Argentina, RedBull cans became a go-to grab to quell homesickness, and since moving to the East Coast, RedBulls remain an afternoon pick-me-up, never wavering in their flavor in that tiny silver tube. 
+    </p>
+  
 
     <Image src="/cans.svg" alt="Two full Red Bull cans and a crumpled empty can" size="medium" align="center"/>
 
-        </div>
+    <h2> What's Next? </h2>
+
+    <p> I'm hoping to track data on 100 Red Bull can prices! I invite you to bookmark this page (or keep it open forever in your browser, if that's how you operate) and revisit as I make progress toward my goal. </p>
+
+    <Progressbar 
+      value={progressStats.value}
+      label={progressStats.label} />
+
+  </ArticleBody>
+
+
+
+        <p> 
+
+        </p>
 
 <p style="font-style: italic;" align="center"> All trademark rights to images, logos and fonts used belong to Red Bull; this webpage content is intended for educational and informational purposes only.  </p>
 </div>
+
+<style lang="scss">
+  .category-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-sm);
+    justify-content: center;
+  }
+
+  button {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full, 9999px);
+    background: var(--color-surface);
+    color: var(--color-text);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font: inherit;
+    cursor: pointer;
+    transition: background-color var(--transition-fast),
+      color var(--transition-fast), border-color var(--transition-fast);
+  }
+
+  button.active {
+    background: var(--color-dark-red);
+    color: var(--color-background);
+    border-color: var(--color-dark-red);
+  }
+
+  button:hover {
+    border-color: var(--color-dark-red);
+  }
+</style>
