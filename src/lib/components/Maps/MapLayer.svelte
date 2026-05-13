@@ -79,6 +79,13 @@ USAGE EXAMPLE:
   /** Tracks the currently-open popup so we can toggle it off when needed. */
   let openPopup = null;
   let openPopupKey = null;
+  let suppressNextMapClick = false;
+
+  const isCoarsePointer =
+    typeof window !== 'undefined' &&
+    typeof window.matchMedia === 'function' &&
+    window.matchMedia('(pointer: coarse)').matches;
+  const TAP_TOLERANCE_PX = isCoarsePointer ? 22 : 10;
 
   function getFeatureKey(feature) {
     if (!feature) return '';
@@ -86,16 +93,15 @@ USAGE EXAMPLE:
     return JSON.stringify({ geometry: feature.geometry, properties: feature.properties });
   }
 
-  /** Handles click on the layer: builds an HTML popup from the template function. */
-  function handlePopupClick(e) {
-    if (!popup) return;
-    const feature = e.features && e.features[0];
-    if (!feature) return;
-
-    if (e.originalEvent && typeof e.originalEvent.stopPropagation === 'function') {
-      e.originalEvent.stopPropagation();
+  function getFeatureLngLat(feature, fallbackLngLat) {
+    const coords = feature?.geometry?.coordinates;
+    if (Array.isArray(coords) && typeof coords[0] === 'number' && typeof coords[1] === 'number') {
+      return coords;
     }
+    return [fallbackLngLat.lng, fallbackLngLat.lat];
+  }
 
+  function openOrTogglePopup(feature, lngLat) {
     const html = popup(feature);
     if (!html) return;
 
@@ -113,7 +119,7 @@ USAGE EXAMPLE:
       closeButton: true,
       closeOnClick: false,
     })
-      .setLngLat(e.lngLat)
+      .setLngLat(lngLat)
       .setHTML(html)
       .addTo(ctx.getMap());
     openPopupKey = featureKey;
@@ -124,8 +130,48 @@ USAGE EXAMPLE:
     });
   }
 
-  /** Closes the popup when the user clicks anywhere else on the map. */
-  function handleMapClickClose() {
+  /** Handles click on the layer: builds an HTML popup from the template function. */
+  function handlePopupClick(e) {
+    if (!popup) return;
+    const feature = e.features && e.features[0];
+    if (!feature) return;
+
+    if (e.originalEvent && typeof e.originalEvent.stopPropagation === 'function') {
+      e.originalEvent.stopPropagation();
+    }
+
+    suppressNextMapClick = true;
+    const lngLat = getFeatureLngLat(feature, e.lngLat);
+    openOrTogglePopup(feature, lngLat);
+  }
+
+  /** Opens nearby feature popups on tap and closes popup on empty-map click. */
+  function handleMapClickClose(e) {
+    if (suppressNextMapClick) {
+      suppressNextMapClick = false;
+      return;
+    }
+
+    if (!popup || !e?.point) return;
+    const map = ctx.getMap();
+    if (!map) return;
+
+    const p = e.point;
+    const nearbyFeatures = map.queryRenderedFeatures(
+      [
+        [p.x - TAP_TOLERANCE_PX, p.y - TAP_TOLERANCE_PX],
+        [p.x + TAP_TOLERANCE_PX, p.y + TAP_TOLERANCE_PX],
+      ],
+      { layers: [validatedId] }
+    );
+
+    const nearbyFeature = nearbyFeatures && nearbyFeatures[0];
+    if (nearbyFeature) {
+      const lngLat = getFeatureLngLat(nearbyFeature, e.lngLat);
+      openOrTogglePopup(nearbyFeature, lngLat);
+      return;
+    }
+
     if (!openPopup) return;
     openPopup.remove();
     openPopup = null;
