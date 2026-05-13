@@ -247,11 +247,5 @@ onDestroy(() => {
   ctx.offStyleLoad(handleStyleLoad);
   removeLayer();
 });
-
-
 </script>
-
-<style lang="scss">
-
-</style>
 
