@@ -329,7 +329,7 @@ This is your page!
     </Card>
     <Card> 
       <h3>Got RedBull?</h3>
-     <p> For my fellow Red Bull drinkers or data enthusiasts (or both!), if you purchased a Red Bull in New York City that's unrepresented on my map, please send me the details to see your purchase reflected in the map. <a href=" " >Complete this form to add your data</a>.</p>
+     <p> For my fellow Red Bull drinkers or data enthusiasts (or both!), if you purchased a Red Bull in New York City that's unrepresented on my map, please send me the details to see your purchase reflected in the map. <a href="https://forms.gle/kg7fX1V1Z9zRmsHG9" target="_blank">Complete this form to add your data</a>.</p>
   <p></p>
 
     </Card>
