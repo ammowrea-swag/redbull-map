@@ -4,24 +4,24 @@ This is your page!
 -->
 <script>
   // Import all the news furniture components
+  import { onMount } from 'svelte';
   import ArticleHeader from '$lib/components/Article/ArticleHeader.svelte';
   import ArticleBody from '$lib/components/Article/ArticleBody.svelte';
   import MethodologyBox from '$lib/components/Article/MethodologyBox.svelte';
   import Image from '$lib/components/Media/Image.svelte';
-  import Map from '$lib/components/Maps/Map.svelte';
-  import MapLayer from '$lib/components/Maps/MapLayer.svelte';
-  import Legend from '$lib/components/Maps/Legend.svelte';
   import BigNumber from '$lib/components/Data/BigNumber.svelte';
   import Dashboard from '$lib/components/Data/Dashboard.svelte';
   import Progressbar from '$lib/components/Data/Progressbar.svelte';
 
   let { data } = $props();
+  const entries = $derived.by(() => data.redbull ?? []);
 
   // Article metadata
   let headline = 'How Much Does A Can of Red Bull Cost in NYC?';
   let byline = 'Ashley Mowreader';
   let pubDate = '2026-05';
-  let dek = 'An interactive data project mapping Red Bull can prices across New York City.';
+  let dek =
+    'An interactive data project mapping Red Bull can prices across New York City.';
   // NYC default center
   const NYC_LNG = -74.006;
   const NYC_LAT = 40.7128;
@@ -36,10 +36,57 @@ This is your page!
   // Category filter state
   let activeCategory = $state('all');
 
+  let mapSection;
+  let MapComponent = $state(null);
+  let MapLayerComponent = $state(null);
+  let mapLoadError = $state('');
+
+  async function loadMapComponents() {
+    if (MapComponent && MapLayerComponent) return;
+
+    try {
+      const [{ default: Map }, { default: MapLayer }] = await Promise.all([
+        import('$lib/components/Maps/Map.svelte'),
+        import('$lib/components/Maps/MapLayer.svelte'),
+      ]);
+
+      MapComponent = Map;
+      MapLayerComponent = MapLayer;
+    } catch (error) {
+      console.error('Failed to load map components', error);
+      mapLoadError = 'The interactive map could not be loaded.';
+    }
+  }
+
+  onMount(() => {
+    if (typeof IntersectionObserver === 'undefined') {
+      loadMapComponents();
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+
+        loadMapComponents();
+        observer.disconnect();
+      },
+      { rootMargin: '200px 0px' }
+    );
+
+    if (mapSection) {
+      observer.observe(mapSection);
+    } else {
+      loadMapComponents();
+    }
+
+    return () => observer.disconnect();
+  });
+
   // Extract unique categories from the data
   const categories = $derived([
     ...new Set(
-      (data.redbull ?? [])
+      entries
         .map((entry) => entry.Category && entry.Category.trim())
         .filter(Boolean)
     ),
@@ -51,7 +98,7 @@ This is your page!
 
   const redbullPoints = $derived.by(() => ({
     type: 'FeatureCollection',
-    features: (data.redbull ?? []).map((entry) => ({
+    features: entries.map((entry) => ({
       type: 'Feature',
       geometry: {
         type: 'Point',
@@ -64,7 +111,9 @@ This is your page!
   const redbullBounds = $derived.by(() => {
     const coordinates = redbullPoints.features
       .map((feature) => feature.geometry?.coordinates)
-      .filter((coordinate) => Array.isArray(coordinate) && coordinate.length === 2);
+      .filter(
+        (coordinate) => Array.isArray(coordinate) && coordinate.length === 2
+      );
 
     if (!coordinates.length) return null;
 
@@ -77,11 +126,11 @@ This is your page!
     ];
   });
 
-    // Filter data based on active category
+  // Filter data based on active category
   const filteredData = $derived(
     activeCategory === 'all'
-      ? data.redbull ?? []
-      : (data.redbull ?? []).filter(
+      ? entries
+      : entries.filter(
           (entry) => entry.Category && entry.Category.trim() === activeCategory
         )
   );
@@ -95,25 +144,29 @@ This is your page!
   );
   const averagePrice = $derived(
     filteredData.length > 0
-      ? (filteredData.reduce((sum, entry) => sum + (entry['Price (8.4oz)'] || 0), 0) / filteredData.length).toFixed(2)
+      ? (
+          filteredData.reduce(
+            (sum, entry) => sum + (entry['Price (8.4oz)'] || 0),
+            0
+          ) / filteredData.length
+        ).toFixed(2)
       : null
   );
 
   // for progress bar
   const progressStats = $derived.by(() => {
-    const total = data.redbull?.length || 0;
+    const total = entries.length;
     const maxEntries = 100;
     return {
       value: (total / maxEntries) * 100,
       label: `${total} Red Bull Locations Mapped out of 100`,
     };
   });
-
- </script>
+</script>
 
 <!-- This sets the page title in the browser tab -->
 <svelte:head>
-  <title>{headline} | Ashley Mowreader </title>
+  <title>{headline} | Ashley Mowreader</title>
   <meta
     name="description"
     content="An interactive map of New York City and relative Red Bull prices at various locations around the city."
@@ -123,49 +176,66 @@ This is your page!
 <!-- Your page content goes here -->
 <!-- Full-width header that bleeds across the page -->
 <div class="header-bleed">
-  <Image src="/redbull-nyc-dots.svg" alt="A can of Red Bull replaces the Empire State Building in the NYC skyline." align="center"/>
+  <Image
+    src="/redbull-nyc-dots.svg"
+    alt="A can of Red Bull replaces the Empire State Building in the NYC skyline."
+    align="center"
+  />
 </div>
 
 <div class="container">
-
   <!-- Article Header: Headline, byline, and publication date -->
   <ArticleHeader {headline} {byline} {pubDate} {dek} />
 
   <!-- Article Body: The main story text with proper typography -->
-  
+
   <ArticleBody>
+    <p>
+      How much does nostalgia cost in New York City? According to my reporting,
+      about {averagePrice ? `$${averagePrice}` : '$TK'}.
+    </p>
 
-    <p> How much does nostalgia cost in New York City? According to my reporting, about {averagePrice ? `$${averagePrice}` : '$TK'}.</p>
-
-     <p> One of my favorite caffeinated beverages is an 8 oz can of Red Bull (original flavor, always.) But while the flavor of Red Bull doesn't waver, the price sure does across New York's five borough. So, like any good data journalist, I've decided to map out the price of Red Bull across the city to figure out exactly steep the cost can rise.
-      </p>
-        <p>
-          This data set is growing and evolving with every Red Bull I purchase, check back in and see if I've explored your neighborhood joint to quench my Red Bull addiction.
-        </p>
+    <p>
+      One of my favorite caffeinated beverages is an 8 oz can of Red Bull
+      (original flavor, always.) But while the flavor of Red Bull doesn't waver,
+      the price sure does across New York's five borough. So, like any good data
+      journalist, I've decided to map out the price of Red Bull across the city
+      to figure out exactly steep the cost can rise.
+    </p>
+    <p>
+      This data set is growing and evolving with every Red Bull I purchase,
+      check back in and see if I've explored your neighborhood joint to quench
+      my Red Bull addiction.
+    </p>
   </ArticleBody>
-  
-  <Image src="/header.svg" alt="An illustrated Red Bull Can logo and bull" q size="large" align="center"/>
 
-  <div class= "description" align="center"> 
-  <p style="font-style: italic;"> Hover over a dot to see details of my Red Bull purchases across the city, including date of purchase, neighborhood and price. Or, sort the data by purchase location and see how trends differ.</p>
+  <Image
+    src="/Header.svg"
+    alt="An illustrated Red Bull Can logo and bull"
+    size="large"
+    align="center"
+  />
+
+  <div class="description" align="center">
+    <p style="font-style: italic;">
+      Hover over a dot to see details of my Red Bull purchases across the city,
+      including date of purchase, neighborhood and price. Or, sort the data by
+      purchase location and see how trends differ.
+    </p>
   </div>
 
   <Dashboard>
-    <BigNumber
-      number={visibleCount}
-      label="Red Bull Purchases Logged"
-    />
+    <BigNumber number={visibleCount} label="Red Bull Purchases Logged" />
 
- <BigNumber
+    <BigNumber
       number={averagePrice ? `$${averagePrice}` : '$TK'}
       label="Average Red Bull Price"
     />
 
-    <BigNumber 
+    <BigNumber
       number={mostExpensivePrice ? `$${mostExpensivePrice.toFixed(2)}` : '$TK'}
       label="Most Expensive Red Bull"
     />
-   
   </Dashboard>
 
   <!-- Category filter pills -->
@@ -179,7 +249,7 @@ This is your page!
       All
     </button>
 
-    {#each categories as category}
+    {#each categories as category (category)}
       <button
         type="button"
         class:active={activeCategory === category}
@@ -190,33 +260,50 @@ This is your page!
     {/each}
   </div>
 
-   <!-- Map component with interactive MapLayer and popups -->
+  <!-- Map component with interactive MapLayer and popups -->
 
-   <div class="map-container">
-  <Map 
+  <div class="map-container" bind:this={mapSection}>
+    {#if MapComponent && MapLayerComponent}
+      <MapComponent
         longitude={mapLng}
         latitude={mapLat}
         zoom={mapZoom}
         bounds={redbullBounds}
-        interactive={false}
+        interactive={true}
+        zoomControl={true}
+        disableGestures={true}
         theme="fiord"
         caption={hasResult
           ? `Showing results near ${mapLat.toFixed(4)}, ${mapLng.toFixed(4)}`
           : ''}
         credit="OpenFreeMap / OpenStreetMap contributors"
       >
-        <MapLayer
+        <MapLayerComponent
           id="search-result-marker"
           type="circle"
           data={redbullPoints}
-          activeCategory={activeCategory}
+          {activeCategory}
           paint={{
-            'circle-radius': 10,
+            'circle-radius': [
+              'max',
+              8,
+              [
+                'interpolate',
+                ['linear'],
+                ['coalesce', ['to-number', ['get', 'Price (8.4oz)']], 0],
+                0,
+                8,
+                5,
+                12,
+                10,
+                18,
+              ],
+            ],
             'circle-color': '#f1d595',
             'circle-stroke-width': 3,
             'circle-stroke-color': '#D2003c',
           }}
-           popup={(feature) => {
+          popup={(feature) => {
             const p = feature.properties ?? {};
             const location = p.Location ?? 'RedBull stop';
             const category = p.Category ? p.Category.trim() : '';
@@ -237,57 +324,86 @@ This is your page!
               ${neighborhood ? `Neighborhood: ${neighborhood}<br/>` : ''}
               ${purchaseDate ? `Purchased: ${purchaseDate}` : ''}
             `;
-  }}
+          }}
         />
-      </Map>
-    </div>
+      </MapComponent>
+    {:else}
+      <div class="map-placeholder" aria-live="polite">
+        {#if mapLoadError}
+          <p>{mapLoadError}</p>
+        {:else}
+          <p>Loading interactive map…</p>
+        {/if}
+      </div>
+    {/if}
+  </div>
 
-    <MethodologyBox title="Methodology">
-      <p>
-        All data was independently collected by the author through in-person visits to various locations across New York City.  Prices were recorded in USD and reflect the cost of an 8oz can of RedBull at each location as of the date of purchase. Data collection is ongoing, and prices may vary over time due to promotions, location-based pricing, or changes in supplier costs.
+  <MethodologyBox title="Methodology">
+    <p>
+      All data was independently collected by the author through in-person
+      visits to various locations across New York City. Prices were recorded in
+      USD and reflect the cost of an 8oz can of RedBull at each location as of
+      the date of purchase. Data collection is ongoing, and prices may vary over
+      time due to promotions, location-based pricing, or changes in supplier
+      costs.
 
-        
-        <a href="https://docs.google.com/spreadsheets/d/1ExMy09OCWdxAQUVO92dmCfXj5p3VVGZ_7wFrs9xuHDc/edit?usp=sharing">See the full dataset here</a> 
-      </p>
-      <p>
-        If you find errors or have questions about this data, please contact us
-        at
-        <a href="mailto:a.mowreader32@journalism.cuny.edu"
-          >a.mowreader32@journalism.cuny.edu</a
-        >.
-      </p>
-    </MethodologyBox>
-
-    <ArticleBody>
-
-      <h2> Why Red Bull? </h2>
-   <p> 
-    As a native Washingtonian, there's few beverages that make me more nostalgic rainy, overcast days in the Puget Sound, surrounded by towering pine trees than a Red Bull over ice. Coloquially called a "Red Bull Italian soda," just about any drive-thru coffee shop in Washington, Oregon or Idaho can help you meet your craving for a sugar-loaded energy drink, plus extra sugar syrups, and maybe a splash of juice or lemonade (or heavy cream if you're literally insane). My go-to is strawberry and peach syrup and a splash of orange juice. 
+      <a
+        href="https://docs.google.com/spreadsheets/d/1ExMy09OCWdxAQUVO92dmCfXj5p3VVGZ_7wFrs9xuHDc/edit?usp=sharing"
+        >See the full dataset here</a
+      >
     </p>
     <p>
-      When I studied abroad in Argentina, RedBull cans became a go-to grab to quell homesickness, and since moving to the East Coast, RedBulls remain an afternoon pick-me-up, never wavering in their flavor in that tiny silver tube. 
+      If you find errors or have questions about this data, please contact us at
+      <a href="mailto:a.mowreader32@journalism.cuny.edu"
+        >a.mowreader32@journalism.cuny.edu</a
+      >.
     </p>
-  
+  </MethodologyBox>
 
-    <Image src="/cans.svg" alt="Two full Red Bull cans and a crumpled empty can" size="medium" align="center"/>
+  <ArticleBody>
+    <h2>Why Red Bull?</h2>
+    <p>
+      As a native Washingtonian, there's few beverages that make me more
+      nostalgic rainy, overcast days in the Puget Sound, surrounded by towering
+      pine trees than a Red Bull over ice. Coloquially called a "Red Bull
+      Italian soda," just about any drive-thru coffee shop in Washington, Oregon
+      or Idaho can help you meet your craving for a sugar-loaded energy drink,
+      plus extra sugar syrups, and maybe a splash of juice or lemonade (or heavy
+      cream if you're literally insane). My go-to is strawberry and peach syrup
+      and a splash of orange juice.
+    </p>
+    <p>
+      When I studied abroad in Argentina, RedBull cans became a go-to grab to
+      quell homesickness, and since moving to the East Coast, RedBulls remain an
+      afternoon pick-me-up, never wavering in their flavor in that tiny silver
+      tube.
+    </p>
 
-    <h2> What's Next? </h2>
+    <Image
+      src="/cans.svg"
+      alt="Two full Red Bull cans and a crumpled empty can"
+      size="medium"
+      align="center"
+    />
 
-    <p> I'm hoping to track data on 100 Red Bull can prices! I invite you to bookmark this page (or keep it open forever in your browser, if that's how you operate) and revisit as I make progress toward my goal. </p>
+    <h2>What's Next?</h2>
 
-    <Progressbar 
-      value={progressStats.value}
-      label={progressStats.label} />
+    <p>
+      I'm hoping to track data on 100 Red Bull can prices! I invite you to
+      bookmark this page (or keep it open forever in your browser, if that's how
+      you operate) and revisit as I make progress toward my goal.
+    </p>
 
+    <Progressbar value={progressStats.value} label={progressStats.label} />
   </ArticleBody>
 
+  <p></p>
 
-
-        <p> 
-
-        </p>
-
-<p style="font-style: italic;" align="center"> All trademark rights to images, logos and fonts used belong to Red Bull; this webpage content is intended for educational and informational purposes only.  </p>
+  <p style="font-style: italic;" align="center">
+    All trademark rights to images, logos and fonts used belong to Red Bull;
+    this webpage content is intended for educational and informational purposes
+    only.
+  </p>
 </div>
 
 <style lang="scss">
@@ -307,17 +423,29 @@ This is your page!
     padding: var(--spacing-xs) var(--spacing-sm);
     font: inherit;
     cursor: pointer;
-    transition: background-color var(--transition-fast),
-      color var(--transition-fast), border-color var(--transition-fast);
+    transition:
+      background-color var(--transition-fast),
+      color var(--transition-fast),
+      border-color var(--transition-fast);
   }
 
   button.active {
     background: var(--color-dark-red);
-    color: var(--color-background);
+    color: var(--color-white);
     border-color: var(--color-dark-red);
   }
 
   button:hover {
     border-color: var(--color-dark-red);
+  }
+
+  .map-placeholder {
+    min-height: 320px;
+    display: grid;
+    place-items: center;
+    background: var(--color-surface);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm, 4px);
   }
 </style>
