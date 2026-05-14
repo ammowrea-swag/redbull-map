@@ -104,7 +104,7 @@ This is your page!
       type: 'Feature',
       geometry: {
         type: 'Point',
-        coordinates: [entry.Latitude, entry.Longitude],
+        coordinates: [entry.Longitude, entry.Latitude],
       },
       properties: entry,
     })),
