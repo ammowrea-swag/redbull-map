@@ -12,6 +12,8 @@ This is your page!
   import BigNumber from '$lib/components/Data/BigNumber.svelte';
   import Dashboard from '$lib/components/Data/Dashboard.svelte';
   import Progressbar from '$lib/components/Data/Progressbar.svelte';
+  import Card from '$lib/components/Data/Card.svelte';
+  import CardGrid from '$lib/components/Data/CardGrid.svelte';
 
   let { data } = $props();
   const entries = $derived.by(() => data.redbull ?? []);
@@ -216,16 +218,9 @@ This is your page!
     align="center"
   />
 
-  <div class="description" align="center">
-    <p style="font-style: italic;">
-      Hover over a dot to see details of my Red Bull purchases across the city,
-      including date of purchase, neighborhood and price. Or, sort the data by
-      purchase location and see how trends differ.
-    </p>
-  </div>
 
   <Dashboard>
-    <BigNumber number={visibleCount} label="Red Bull Purchases Logged" />
+    <BigNumber number={visibleCount} label="Red Bull Purchases" />
 
     <BigNumber
       number={averagePrice ? `$${averagePrice}` : '$TK'}
@@ -237,6 +232,13 @@ This is your page!
       label="Most Expensive Red Bull"
     />
   </Dashboard>
+
+    <div class="description" align="center">
+    <p style="font-style: italic;">
+      Hover over a dot to see details of my Red Bull purchases across the city,
+      including date of purchase, neighborhood and price. Or, sort the data by the establishment it was purchased at and see how trends differ.
+    </p>
+  </div>
 
   <!-- Category filter pills -->
   <div class="category-filters" aria-label="Map categories">
@@ -283,26 +285,6 @@ This is your page!
           type="circle"
           data={redbullPoints}
           {activeCategory}
-          paint={{
-            'circle-radius': [
-              'max',
-              8,
-              [
-                'interpolate',
-                ['linear'],
-                ['coalesce', ['to-number', ['get', 'Price (8.4oz)']], 0],
-                0,
-                8,
-                5,
-                12,
-                10,
-                18,
-              ],
-            ],
-            'circle-color': '#f1d595',
-            'circle-stroke-width': 3,
-            'circle-stroke-color': '#D2003c',
-          }}
           popup={(feature) => {
             const p = feature.properties ?? {};
             const location = p.Location ?? 'RedBull stop';
@@ -338,6 +320,60 @@ This is your page!
     {/if}
   </div>
 
+  <CardGrid> 
+
+      <Card>
+      <h3> Project Notes </h3>
+      <p> This is an on-going interactive dataset, auto-updating each Sunday with GitActions. Data is not meant to be comprehensive or a reflection of pricing trends of Red Bull, but rather a portfolio piece for a budding data nerd.
+      </p>
+    </Card>
+    <Card> 
+      <h3>Got RedBull?</h3>
+     <p> For my fellow Red Bull drinkers or data enthusiasts (or both!), if you purchased a Red Bull in New York City that's unrepresented on my map, please send me the details to see your purchase reflected in the map. <a href=" " >Complete this form to add your data</a>.</p>
+  <p></p>
+
+    </Card>
+
+</CardGrid>
+
+  <ArticleBody>
+    <h2>Why Red Bull?</h2>
+    <p>
+      As a native Washingtonian, there's few beverages that make me more
+      nostalgic rainy, overcast days in the Puget Sound, surrounded by towering
+      pine trees than a Red Bull over ice. Coloquially called a "Red Bull
+      Italian soda," just about any drive-thru coffee shop in Washington, Oregon
+      or Idaho can help you meet your craving for a sugar-loaded energy drink,
+      plus extra sugar syrups, and maybe a splash of juice or lemonade (or heavy
+      cream if you're literally insane). My go-to is strawberry and peach syrup
+      and a splash of orange juice.
+    </p>
+
+     <p>
+      When I studied abroad in Argentina, RedBull cans became a go-to grab to
+      quell homesickness, and since moving to the East Coast, RedBulls remain an
+      afternoon pick-me-up, never wavering in their flavor in that tiny silver
+      tube.
+    </p>
+
+<Image
+      src="/cans.svg"
+      alt="Two full Red Bull cans and a crumpled empty can"
+      size="medium"
+      align="center"
+    />
+
+    <h2>What's Next?</h2>
+
+    <p>
+      I'm hoping to track data on 100 Red Bull can prices! I invite you to
+      bookmark this page (or keep it open forever in your browser, if that's how
+      you operate) and revisit as I make progress toward my goal.
+    </p>
+
+    <Progressbar value={progressStats.value} label={progressStats.label} />
+  </ArticleBody>
+  
   <MethodologyBox title="Methodology">
     <p>
       All data was independently collected by the author through in-person
@@ -355,55 +391,18 @@ This is your page!
     <p>
       If you find errors or have questions about this data, please contact us at
       <a href="mailto:a.mowreader32@journalism.cuny.edu"
-        >a.mowreader32@journalism.cuny.edu</a
-      >.
+        >a.mowreader32@journalism.cuny.edu</a>.
     </p>
   </MethodologyBox>
 
-  <ArticleBody>
-    <h2>Why Red Bull?</h2>
-    <p>
-      As a native Washingtonian, there's few beverages that make me more
-      nostalgic rainy, overcast days in the Puget Sound, surrounded by towering
-      pine trees than a Red Bull over ice. Coloquially called a "Red Bull
-      Italian soda," just about any drive-thru coffee shop in Washington, Oregon
-      or Idaho can help you meet your craving for a sugar-loaded energy drink,
-      plus extra sugar syrups, and maybe a splash of juice or lemonade (or heavy
-      cream if you're literally insane). My go-to is strawberry and peach syrup
-      and a splash of orange juice.
-    </p>
-    <p>
-      When I studied abroad in Argentina, RedBull cans became a go-to grab to
-      quell homesickness, and since moving to the East Coast, RedBulls remain an
-      afternoon pick-me-up, never wavering in their flavor in that tiny silver
-      tube.
-    </p>
-
-    <Image
-      src="/cans.svg"
-      alt="Two full Red Bull cans and a crumpled empty can"
-      size="medium"
-      align="center"
-    />
-
-    <h2>What's Next?</h2>
-
-    <p>
-      I'm hoping to track data on 100 Red Bull can prices! I invite you to
-      bookmark this page (or keep it open forever in your browser, if that's how
-      you operate) and revisit as I make progress toward my goal.
-    </p>
-
-    <Progressbar value={progressStats.value} label={progressStats.label} />
-  </ArticleBody>
-
-  <p></p>
-
+ 
+<div class="footer"> 
   <p style="font-style: italic;" align="center">
     All trademark rights to images, logos and fonts used belong to Red Bull;
     this webpage content is intended for educational and informational purposes
     only.
   </p>
+  </div>
 </div>
 
 <style lang="scss">

@@ -36,6 +36,27 @@ USAGE EXAMPLE:
   import { getContext, onDestroy } from 'svelte';
   import maplibregl from 'maplibre-gl';
 
+  const DEFAULT_CIRCLE_PAINT = {
+    'circle-radius': [
+      'max',
+      8,
+      [
+        'interpolate',
+        ['linear'],
+        ['coalesce', ['to-number', ['get', 'Price (8.4oz)']], 0],
+        0,
+        8,
+        5,
+        12,
+        10,
+        18,
+      ],
+    ],
+    'circle-color': '#f1d595',
+    'circle-stroke-width': 3,
+    'circle-stroke-color': '#D2003c',
+  };
+
 
   let {
     id, // Unique layer identifier (required)
@@ -46,6 +67,10 @@ USAGE EXAMPLE:
     popup = null, // Optional function (feature) => htmlString
     activeCategory = 'all', // Active category for filtering (default: 'all')
   } = $props();
+
+  const effectivePaint = $derived.by(() =>
+    type === 'circle' ? { ...DEFAULT_CIRCLE_PAINT, ...paint } : paint
+  );
 
   // Filter features by selected category
   const filteredFeatures = $derived(
@@ -211,7 +236,7 @@ USAGE EXAMPLE:
       id: validatedId,
       type,
       source: validatedId,
-      paint,
+      paint: effectivePaint,
       layout,
     });
 
@@ -273,7 +298,7 @@ USAGE EXAMPLE:
   $effect(() => {
     const map = ctx.getMap();
     if (!map || !map.getLayer(validatedId)) return;
-    const currentPaint = paint; // read reactive prop
+    const currentPaint = effectivePaint;
     const currentKeys = Object.keys(currentPaint);
 
     // Unset any paint properties that were removed
@@ -292,17 +317,6 @@ USAGE EXAMPLE:
   });
 
   // Keep circle dots visually consistent regardless of category selection.
-  $effect(() => {
-    const map = ctx.getMap();
-    if (!map || !map.getLayer(validatedId)) return;
-    // Only applies to circle layers
-    if (type !== 'circle') return;
-
-    map.setPaintProperty(validatedId, 'circle-color', '#f1d595');
-    map.setPaintProperty(validatedId, 'circle-stroke-width', 3);
-    map.setPaintProperty(validatedId, 'circle-stroke-color', '#D2003c');
-  });
-
 onDestroy(() => {
   ctx.offStyleLoad(handleStyleLoad);
   removeLayer();

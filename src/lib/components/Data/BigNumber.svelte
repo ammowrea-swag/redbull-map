@@ -19,11 +19,12 @@
     background-color: var(--color-gold);
     color: var(--color-dark-red);
     border-radius: var(--border-radius-sm);
+    height: 100%;
   }
 
   .number {
     display: block;
-    font-size: var(--font-size-display);
+    font-size: 2rem;
     font-weight: var(--font-weight-bold);
     color: var(--color-dark-blue);
     line-height: var(--leading-heading);

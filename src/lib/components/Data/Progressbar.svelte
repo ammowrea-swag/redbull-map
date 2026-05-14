@@ -8,8 +8,8 @@
 <div class="progressbar-container">
   <div class="progressbar-track">
     <div class="progressbar-fill" style="width: {clampedValue}%"></div>
+    <div class="progressbar-label">{label}</div>
   </div>
-  <div class="progressbar-label">{label}</div>
 </div>
 
 <style lang="scss">
@@ -22,27 +22,33 @@
   }
 
   .progressbar-track {
+    position: relative;
     width: 100%;
     height: 24px;
     background-color: var(--color-dark-blue);
     border-radius: var(--radius-full, 9999px);
     overflow: hidden;
+    display: flex;
+    align-items: center;
   }
 
   .progressbar-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
     height: 100%;
     background-color: var(--color-dark-red);
     transition: width 0.3s ease-out;
   }
 
   .progressbar-label {
+    position: relative;
+    z-index: 10;
+    width: 100%;
     font-size: var(--font-size-md, 1rem);
-    color: var(--color-text);
-    padding: var(--spacing-xs) var(--spacing-sm);
-    background-color: var(--color-silver);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm, 4px);
+    color: var(--color-white);
     text-align: center;
+    font-weight: 500;
   }
 
   @include mobile {

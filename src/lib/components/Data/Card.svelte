@@ -44,20 +44,20 @@ Card.svelte — A card container with optional image, link, and footer actions.
 
 <style lang="scss">
   .card {
-    border: 1px solid var(--color-border, #ddd);
-    border-radius: 4px;
-    background: var(--color-white, #fff);
+    border-radius: var(--border-radius-sm);
+    background: var(--color-dark-blue, #003366);
     overflow: hidden;
     display: flex;
     flex-direction: column;
     height: 100%;
+    text-align: center;
   }
 
   .card-link {
     display: flex;
     flex-direction: column;
     height: 100%;
-    color: inherit;
+    color: var(--color-gold, #fff);
     text-decoration: none;
     transition: box-shadow 0.2s ease;
 
@@ -82,20 +82,27 @@ Card.svelte — A card container with optional image, link, and footer actions.
       font-size: 1.1rem;
       margin: 0 0 0.5rem;
       line-height: 1.3;
+      color: var(--color-gold, #fff);
     }
 
     :global(p) {
       font-size: 0.9rem;
       margin: 0;
       line-height: 1.5;
-      color: var(--color-text-secondary, #555);
+      color: var(--color-white, #fff);
+    }
+
+    :global(a) {
+      color: var(--color-gold, #fff);
+      text-decoration: underline;
     }
   }
+  
 
   .card-footer {
     border-top: 1px solid var(--color-border, #ddd);
     padding: var(--spacing-sm, 0.75rem) var(--spacing-md, 1rem);
-    background: var(--color-light-gray, #f5f5f5);
+    background: var(--color-dark-blue, #003366);
     margin-top: auto;
   }
 </style>

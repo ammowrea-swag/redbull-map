@@ -19,6 +19,9 @@ and three columns on desktop.
   .card-grid {
     display: grid;
     grid-template-columns: 1fr;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
     gap: var(--spacing-md);
     margin-bottom: var(--spacing-lg);
 
@@ -27,7 +30,7 @@ and three columns on desktop.
     }
 
     @include desktop {
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 </style>
