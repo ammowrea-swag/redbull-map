@@ -337,23 +337,18 @@ This is your page!
 </CardGrid>
 
   <ArticleBody>
+  <h2> Why Does This Project Matter? </h2>
+  <p>
+    It's a grade, according to Ben Welsh. But for you, as a consumer, it's a snapshot of the ways different neighborhoods and establishments across the city price the same product. Grocery prices are historically murky, and between <a href="https://www.nytimes.com/2026/05/14/nyregion/nyc-grocery-stores-surveillance-pricing.html"> dynamic pricing algorithms</a>, in the city, rising inflation and <a href="https://www.spglobal.com/energy/en/news-research/latest-news/metals/041426-north-american-aluminum-sector-nearing-supply-crisis-after-middle-east-disruptions">an aluminum shortage</a>, my Red Bull's sticker price is under threat.</p>
+
     <h2>Why Red Bull?</h2>
     <p>
-      As a native Washingtonian, there's few beverages that make me more
-      nostalgic rainy, overcast days in the Puget Sound, surrounded by towering
-      pine trees than a Red Bull over ice. Coloquially called a "Red Bull
-      Italian soda," just about any drive-thru coffee shop in Washington, Oregon
-      or Idaho can help you meet your craving for a sugar-loaded energy drink,
-      plus extra sugar syrups, and maybe a splash of juice or lemonade (or heavy
-      cream if you're literally insane). My go-to is strawberry and peach syrup
-      and a splash of orange juice.
+      As a native Washingtonian, there's few beverages that make me feel nostaligic for rainy, overcast days in the Puget Sound, surrounded by towering pine trees, than a Red Bull over ice. Coloquially called a "Red Bull Italian soda," just about any drive-thru coffee shop in Washington, Oregon or Idaho (and increasingly, Arizona and California) can help you meet your craving for a sugar-loaded energy drink. In addition to 24 plus ounces of your energy drink of choice, you get a dozen pumps of sticky flavored syrups, paired with juice or lemonade (or heavy cream if you're literally insane) and topped with whipped cream if you're extra. My go-to is Red Bull with strawberry and peach syrup and a splash of orange juice.
     </p>
 
      <p>
-      When I studied abroad in Argentina, RedBull cans became a go-to grab to
-      quell homesickness, and since moving to the East Coast, RedBulls remain an
-      afternoon pick-me-up, never wavering in their flavor in that tiny silver
-      tube.
+      When I studied abroad in Argentina, Red Bull cans became a go-to grab to
+      quell homesickness, and since moving to the East Coast, Red Bulls remain a mid-day pick-me-up, bringing me right back to those rainy afternoons in Puyallup. It's also given me a ridiculous caffeine tolerance, but that's a different issue. 
     </p>
 
 <Image
@@ -385,8 +380,7 @@ This is your page!
 
       <a
         href="https://docs.google.com/spreadsheets/d/1ExMy09OCWdxAQUVO92dmCfXj5p3VVGZ_7wFrs9xuHDc/edit?usp=sharing"
-        >See the full dataset here</a
-      >
+        >See the full dataset here</a>
     </p>
     <p>
       If you find errors or have questions about this data, please contact us at
