@@ -104,7 +104,10 @@ This is your page!
       type: 'Feature',
       geometry: {
         type: 'Point',
-        coordinates: [entry.Longitude, entry.Latitude],
+        // Note: dataset fields are named `Longitude` and `Latitude` but
+        // contain latitude and longitude values respectively. GeoJSON
+        // requires [longitude, latitude], so swap the fields here.
+        coordinates: [entry.Latitude, entry.Longitude],
       },
       properties: entry,
     })),
