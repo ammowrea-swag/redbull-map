@@ -339,7 +339,7 @@ This is your page!
   <ArticleBody>
   <h2> Why Does This Project Matter? </h2>
   <p>
-    It's a grade, according to Ben Welsh. But for you, as a consumer, it's a snapshot of the ways different neighborhoods and establishments across the city price the same product. Grocery prices are historically murky, and between <a href="https://www.nytimes.com/2026/05/14/nyregion/nyc-grocery-stores-surveillance-pricing.html"> dynamic pricing algorithms</a>, in the city, rising inflation and <a href="https://www.spglobal.com/energy/en/news-research/latest-news/metals/041426-north-american-aluminum-sector-nearing-supply-crisis-after-middle-east-disruptions">an aluminum shortage</a>, my Red Bull's sticker price is under threat.</p>
+    It's a grade, according to Ben Welsh. But for you, as a consumer, it's a snapshot of the ways different neighborhoods and establishments across the city price the same product. Grocery prices are historically murky, and between <a href="https://www.nytimes.com/2026/05/14/nyregion/nyc-grocery-stores-surveillance-pricing.html"> dynamic pricing algorithms</a> in the city, rising inflation and <a href="https://www.spglobal.com/energy/en/news-research/latest-news/metals/041426-north-american-aluminum-sector-nearing-supply-crisis-after-middle-east-disruptions">an aluminum shortage</a>, my Red Bull's sticker price is under threat.</p>
 
     <h2>Why Red Bull?</h2>
     <p>
