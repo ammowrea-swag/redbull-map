@@ -118,5 +118,15 @@
     "Latitude": -73.7807243,
     "Purchase_date": "2026-05-17T04:00:00.000Z",
     "neighborhood": "Queens "
+  },
+  {
+    "Index": 13,
+    "Location": "Duane Reade (Penn Station)",
+    "Category": "Bodega",
+    "Price (8.4oz)": 3.19,
+    "Longitude": "",
+    "Latitude": "",
+    "Purchase_date": "2026-05-19T04:00:00.000Z",
+    "neighborhood": "Midtown"
   }
 ]
