@@ -128,5 +128,25 @@
     "Latitude": "",
     "Purchase_date": "2026-05-19T04:00:00.000Z",
     "neighborhood": "Midtown"
+  },
+  {
+    "Index": 14,
+    "Location": "Halal cart outside the Met ",
+    "Category": "Cart",
+    "Price (8.4oz)": 4.72,
+    "Longitude": "",
+    "Latitude": "",
+    "Purchase_date": "2026-06-06T04:00:00.000Z",
+    "neighborhood": "Upper East Side "
+  },
+  {
+    "Index": "",
+    "Location": "Soho deli and grocery ",
+    "Category": "",
+    "Price (8.4oz)": 3.99,
+    "Longitude": "",
+    "Latitude": "",
+    "Purchase_date": "2026-06-07T04:00:00.000Z",
+    "neighborhood": "Lower east side"
   }
 ]
