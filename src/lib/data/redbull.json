@@ -124,8 +124,8 @@
     "Location": "Duane Reade (Penn Station)",
     "Category": "Bodega",
     "Price (8.4oz)": 3.19,
-    "Longitude": "",
-    "Latitude": "",
+    "Longitude": 40.7499869,
+    "Latitude": -73.9948258,
     "Purchase_date": "2026-05-19T04:00:00.000Z",
     "neighborhood": "Midtown"
   },
@@ -134,19 +134,49 @@
     "Location": "Halal cart outside the Met ",
     "Category": "Cart",
     "Price (8.4oz)": 4.72,
-    "Longitude": "",
-    "Latitude": "",
+    "Longitude": 40.778691,
+    "Latitude": -73.96261,
     "Purchase_date": "2026-06-06T04:00:00.000Z",
     "neighborhood": "Upper East Side "
   },
   {
-    "Index": "",
-    "Location": "Soho deli and grocery ",
-    "Category": "",
+    "Index": 15,
+    "Location": "Soho deli grocery ",
+    "Category": "Bodega",
     "Price (8.4oz)": 3.99,
-    "Longitude": "",
-    "Latitude": "",
+    "Longitude": 40.7223721,
+    "Latitude": -73.9968988,
     "Purchase_date": "2026-06-07T04:00:00.000Z",
     "neighborhood": "Lower east side"
+  },
+  {
+    "Index": 16,
+    "Location": "55 Fulton Market",
+    "Category": "Grocery ",
+    "Price (8.4oz)": 3.31,
+    "Longitude": 40.7087181,
+    "Latitude": -74.0072935,
+    "Purchase_date": "2026-06-09T04:00:00.000Z",
+    "neighborhood": "Financial district"
+  },
+  {
+    "Index": 17,
+    "Location": "9C, 30 Rock",
+    "Category": "Restaurant",
+    "Price (8.4oz)": 4.35,
+    "Longitude": "",
+    "Latitude": "",
+    "Purchase_date": "2026-06-10T04:00:00.000Z",
+    "neighborhood": "Midtown "
+  },
+  {
+    "Index": "",
+    "Location": "Walgreens / Duane Reade",
+    "Category": "",
+    "Price (8.4oz)": 3.19,
+    "Longitude": "",
+    "Latitude": "",
+    "Purchase_date": "",
+    "neighborhood": "Midtown"
   }
 ]
