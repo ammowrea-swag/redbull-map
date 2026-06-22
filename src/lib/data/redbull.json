@@ -164,19 +164,39 @@
     "Location": "9C, 30 Rock",
     "Category": "Restaurant",
     "Price (8.4oz)": 4.35,
-    "Longitude": "",
-    "Latitude": "",
+    "Longitude": 40.7593573,
+    "Latitude": -73.9826472,
     "Purchase_date": "2026-06-10T04:00:00.000Z",
     "neighborhood": "Midtown "
   },
   {
-    "Index": "",
+    "Index": 18,
     "Location": "Walgreens / Duane Reade",
-    "Category": "",
+    "Category": "Bodega",
     "Price (8.4oz)": 3.19,
-    "Longitude": "",
-    "Latitude": "",
-    "Purchase_date": "",
+    "Longitude": 40.757573,
+    "Latitude": -73.9909135,
+    "Purchase_date": "2026-06-11T04:00:00.000Z",
     "neighborhood": "Midtown"
+  },
+  {
+    "Index": 19,
+    "Location": "Central Valley Deli",
+    "Category": "Bodega",
+    "Price (8.4oz)": 5.65,
+    "Longitude": 40.7660773,
+    "Latitude": -73.9846271,
+    "Purchase_date": "2026-06-18T04:00:00.000Z",
+    "neighborhood": "Midtown"
+  },
+  {
+    "Index": 20,
+    "Location": "Metro Access Market",
+    "Category": "Grocery",
+    "Price (8.4oz)": 3.32,
+    "Longitude": 40.723632,
+    "Latitude": -73.9952161,
+    "Purchase_date": "2026-06-19T04:00:00.000Z",
+    "neighborhood": "East Village"
   }
 ]
