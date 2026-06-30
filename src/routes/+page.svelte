@@ -327,7 +327,7 @@ This is your page!
 
       <Card>
       <h3> Project Notes </h3>
-      <p> This is an on-going interactive dataset, auto-updating each Sunday with GitActions. Data is not meant to be comprehensive or a reflection of pricing trends of Red Bull, but rather a portfolio piece for a budding data nerd.
+      <p> This is an on-going interactive dataset, auto-updating each Sunday with GitHub Actions. Data is not meant to be comprehensive or a reflection of pricing trends of Red Bull, but rather a portfolio piece for a budding data nerd.
       </p>
     </Card>
     <Card> 
