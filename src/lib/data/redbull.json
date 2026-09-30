@@ -198,5 +198,25 @@
     "Latitude": -73.9952161,
     "Purchase_date": "2026-06-19T04:00:00.000Z",
     "neighborhood": "East Village"
+  },
+  {
+    "Index": 21,
+    "Location": "Joe M Minimarket",
+    "Category": "Bodega",
+    "Price (8.4oz)": 3.11,
+    "Longitude": 40.8144339,
+    "Latitude": -73.9598122,
+    "Purchase_date": "2026-08-01T04:00:00.000Z",
+    "neighborhood": "Morningside Heights"
+  },
+  {
+    "Index": 22,
+    "Location": "2nd Ave Gourmet Deli",
+    "Category": "Bodega",
+    "Price (8.4oz)": 3.95,
+    "Longitude": 40.7393722,
+    "Latitude": -74.0004636,
+    "Purchase_date": "2026-08-27T04:00:00.000Z",
+    "neighborhood": "East Village"
   }
 ]
