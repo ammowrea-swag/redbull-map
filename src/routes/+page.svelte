@@ -293,7 +293,11 @@ This is your page!
             const location = p.Location ?? 'RedBull stop';
             const category = p.Category ? p.Category.trim() : '';
             const neighborhood = p.neighborhood ? p.neighborhood.trim() : '';
-            const price = p['Price (8.4oz)'] ?? 'N/A';
+            const price = p['Price (8.4oz)'];
+            const priceLabel =
+              typeof price === 'number' && Number.isFinite(price)
+                ? `$${price.toFixed(2)}`
+                : 'N/A';
             const purchaseDate = p.Purchase_date
               ? new Date(p.Purchase_date).toLocaleDateString('en-US', {
                   month: 'short',
@@ -305,7 +309,7 @@ This is your page!
             return `
               <strong>${location}</strong><br/>
               ${category ? `${category}<br/>` : ''}
-              Price: $${price}<br/>
+              Price: ${priceLabel}<br/>
               ${neighborhood ? `Neighborhood: ${neighborhood}<br/>` : ''}
               ${purchaseDate ? `Purchased: ${purchaseDate}` : ''}
             `;
