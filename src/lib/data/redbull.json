@@ -218,5 +218,15 @@
     "Latitude": -74.0004636,
     "Purchase_date": "2026-08-27T04:00:00.000Z",
     "neighborhood": "East Village"
+  },
+  {
+    "Index": 23,
+    "Location": "Walgreens / Duane Reade",
+    "Category": "Bodega",
+    "Price (8.4oz)": 3.8,
+    "Longitude": 40.8150495,
+    "Latitude": -73.9585581,
+    "Purchase_date": "2026-09-18T04:00:00.000Z",
+    "neighborhood": "West Harlem"
   }
 ]
