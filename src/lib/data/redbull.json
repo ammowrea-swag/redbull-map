@@ -157,7 +157,7 @@
     "Longitude": 40.7087181,
     "Latitude": -74.0072935,
     "Purchase_date": "2026-06-09T04:00:00.000Z",
-    "neighborhood": "Financial district"
+    "neighborhood": "Financial District"
   },
   {
     "Index": 17,
@@ -228,5 +228,25 @@
     "Latitude": -73.9585581,
     "Purchase_date": "2026-09-18T04:00:00.000Z",
     "neighborhood": "West Harlem"
+  },
+  {
+    "Index": 24,
+    "Location": "Mom's food market",
+    "Category": "Bodega",
+    "Price (8.4oz)": 4.51,
+    "Longitude": 40.8012687,
+    "Latitude": -73.9619525,
+    "Purchase_date": "",
+    "neighborhood": "Upper West Side"
+  },
+  {
+    "Index": 25,
+    "Location": "McDonald's",
+    "Category": "Restaurant",
+    "Price (8.4oz)": 3.99,
+    "Longitude": 40.8557493,
+    "Latitude": -73.8675211,
+    "Purchase_date": "2026-11-07T05:00:00.000Z",
+    "neighborhood": "Bronx"
   }
 ]
